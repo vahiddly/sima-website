@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SİMA — rəqəmsal imza və biometrik identifikasiya platforması</title>
+<meta name="description" content="Beş rəqəmsal həll bir platformada: sənəd imzalama, uzaqdan müştəri tanıma, üztanıma ilə giriş və ödəniş.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#141735;
+  --deep:#1D204F;
+  --deep2:#1D204F;
+  --paper:#FFFFFF;
+  --haze:#F2F4F7;
+  --haze-2:#E7EBF1;
+  --green:#00B04E;
+  --green-deep:#00933F;
+  --green-l:#E8F7EE;
+  --cyan:#5FD7E8;
+  --cyan-deep:#1B7F93;
+  --ice:#E6F2F6;
+  --ink:#10142E;
+  --ink-soft:#5B6079;
+  --onvoid:#EAECF4;
+  --onvoid-soft:#9AA0BC;
+  --hair:#E4E8EE;
+  --hair-dark:rgba(255,255,255,.13);
+  --d:'Unbounded',system-ui,sans-serif;
+  --b:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --m:'IBM Plex Mono',ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--b);background:var(--paper);color:var(--ink);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:3px}
+.w{max-width:1320px;margin:0 auto;padding:0 32px}
+.dark{background:var(--void);color:var(--onvoid)}
+.light{background:var(--paper)}
+.haze{background:var(--haze)}
+
+/* type */
+h1,h2,h3,.dsp{font-family:var(--d);letter-spacing:-.04em;line-height:1.04;font-weight:600}
+h1{font-size:clamp(2rem,4.1vw,3.4rem)}
+h2{font-size:clamp(1.65rem,2.9vw,2.45rem)}
+.thin{font-weight:600}
+.lead{font-size:clamp(1rem,1.25vw,1.12rem);line-height:1.55;color:var(--ink-soft);max-width:52ch}
+.dark .lead{color:var(--onvoid-soft)}
+.note{font-size:.93rem;color:var(--ink-soft)}
+.dark .note{color:var(--onvoid-soft)}
+.sec{padding:96px 0}
+.sec-sm{padding:72px 0}
+.shead{max-width:46ch;margin-bottom:48px}
+.shead h2{white-space:nowrap}
+.shead p{margin-top:18px;font-size:1.04rem;color:var(--ink-soft);max-width:none;white-space:nowrap}
+.dark .shead p{color:var(--onvoid-soft)}
+.srow{display:flex;justify-content:space-between;align-items:flex-end;gap:36px;flex-wrap:wrap;margin-bottom:56px}
+.srow .shead{margin-bottom:0}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:9px;padding:16px 28px;border-radius:999px;font-weight:600;font-size:.96rem;letter-spacing:-.01em;border:1px solid transparent;transition:background .2s,color .2s,border-color .2s}
+.b-green{background:var(--green);color:#fff}
+.b-green:hover{background:var(--green-deep)}
+.b-wire{border-color:rgba(255,255,255,.26);color:var(--onvoid)}
+.b-wire:hover{border-color:var(--onvoid);background:rgba(255,255,255,.06)}
+.b-ink{background:var(--ink);color:#fff}
+.b-ink:hover{background:#0E2B33}
+.b-line{border-color:var(--hair);color:var(--ink);background:#fff}
+.b-line:hover{border-color:var(--ink)}
+.btn-sm{padding:11px 20px;font-size:.88rem}
+.lnk{font-weight:600;font-size:.94rem;color:var(--green-deep);border-bottom:1.5px solid transparent;transition:border-color .2s}
+.lnk:hover{border-bottom-color:currentColor}
+.dark .lnk{color:var(--green)}
+
+/* ---------- navbar ---------- */
+.hdr{border-bottom:1px solid var(--hair);background:#fff}
+.nav{display:flex;align-items:center;height:92px;gap:40px}
+.logo{height:46px;width:auto;flex:none}
+.nv{display:flex;gap:34px;font-size:1rem;font-weight:500;color:var(--ink);margin:0 auto}
+.nv a:hover{color:var(--green-deep)}
+.nav-r{display:flex;align-items:center;gap:12px}
+.lang{font-size:.95rem;font-weight:500;padding:6px 8px}
+.iconbtn{width:46px;height:46px;border-radius:50%;background:var(--haze);display:grid;place-items:center;color:var(--ink);transition:background .2s}
+.iconbtn:hover{background:#E7EBF1}
+.npill{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 24px;border-radius:999px;font-weight:600;font-size:.97rem;transition:.2s}
+.npill-soft{background:var(--haze);color:var(--ink)}
+.npill-soft:hover{background:#E7EBF1}
+.npill-green{background:var(--green);color:#fff}
+.npill-green:hover{background:var(--green-deep)}
+.burger{display:none;width:46px;height:46px;border-radius:50%;background:var(--haze);place-items:center}
+
+/* ---------- hero ---------- */
+.hero{padding:70px 0 0;overflow:hidden}
+.head{text-align:center;max-width:980px;margin:0 auto}
+.head h1{font-family:var(--d);font-weight:600;letter-spacing:-.045em;line-height:1.06;
+  font-size:clamp(2rem,4.3vw,3.6rem);margin-bottom:20px}
+.head p{font-size:clamp(1rem,1.25vw,1.13rem);color:var(--ink-soft);max-width:54ch;margin:0 auto 30px}
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ---------- stage ---------- */
+.stage{position:relative;margin-top:50px;height:clamp(360px,36vw,440px)}
+.el{position:absolute;left:50%;bottom:0;transform:translateX(-50%);border-radius:50% 50% 0 0;pointer-events:none}
+.el-1{width:clamp(300px,30vw,380px);aspect-ratio:1/.56;background:linear-gradient(180deg,#F4FBF7 0%,#E3F5EB 100%)}
+.el-2{width:clamp(380px,30vw,460px);aspect-ratio:1/.56;border:1px solid #E6EDE9;border-bottom:0}
+.el-3{width:clamp(460px,30vw,540px);aspect-ratio:1/.56;border:1px solid #EDF1EF;border-bottom:0}
+
+.phone{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:clamp(188px,17vw,224px);
+  aspect-ratio:1/1.62;background:#14182F;border-radius:32px 32px 0 0;padding:6px 6px 0;
+  box-shadow:-18px 20px 52px -34px rgba(16,20,46,.42),18px 20px 52px -34px rgba(16,20,46,.42);z-index:5}
+.scr{position:relative;width:100%;height:100%;background:#fff;border-radius:27px 27px 0 0;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;padding-top:24px}
+.scr::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:40%;height:16px;background:#14182F;border-radius:0 0 10px 10px;z-index:3}
+.sbar{width:74%;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sbar b{font-size:.6rem;font-weight:700;color:var(--deep2);letter-spacing:-.02em}
+.sbar i{width:24px;height:5px;border-radius:3px;background:#EAEEF3;display:block}
+.faceart{position:relative;width:78%;margin-top:36px}
+.faceart img{width:100%;height:auto}
+.beam{position:absolute;left:4%;right:4%;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+  box-shadow:0 0 12px rgba(0,176,78,.75);animation:bm 3.1s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes bm{0%{top:4%;opacity:0}10%{opacity:1}50%{top:88%;opacity:1}60%{top:88%;opacity:0}100%{top:4%;opacity:0}}
+.scap{margin-top:12px;font-size:.63rem;font-weight:600;color:var(--green-deep)}
+
+/* ---------- floating components ---------- */
+.f{position:absolute;z-index:6;opacity:0;transform:translateY(14px) scale(.97);
+  animation:rise .6s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* A — signed document */
+.f-doc{left:5%;top:2%;width:clamp(146px,14vw,176px);background:#fff;border:1px solid var(--hair);
+  border-radius:18px;padding:12px;box-shadow:0 22px 40px -26px rgba(16,20,46,.35);animation-delay:.45s}
+.f-doc .sheet{background:var(--haze);border-radius:11px;padding:12px 11px 9px}
+.f-doc .sheet u{display:block;height:5px;border-radius:3px;background:#E1E6EC;margin-bottom:6px;text-decoration:none}
+.f-doc .sheet u:nth-child(2){width:72%} .f-doc .sheet u:nth-child(3){width:86%}
+.f-doc .sig{margin-top:8px;width:74%}
+.f-doc .sig path{stroke:var(--deep2);fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:240;stroke-dashoffset:240;animation:draw 1.1s ease .9s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.f-doc .cap{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:.77rem;font-weight:600}
+.f-doc .cap em{width:17px;height:17px;border-radius:50%;background:var(--green);display:grid;place-items:center;flex:none;font-style:normal}
+.f-doc .r{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;padding-top:9px;border-top:1px solid var(--hair)}
+.src{font-size:.7rem;font-weight:600;color:var(--green-deep)}
+.st{font-size:.7rem;color:var(--ink-soft)}
+
+/* B — access event (white, simple) */
+.f-acc{left:9%;top:calc(42% + 48px);width:clamp(180px,18vw,214px);background:#fff;border:1px solid var(--hair);
+  border-radius:18px;padding:14px 15px;box-shadow:0 22px 42px -26px rgba(16,20,46,.35);animation-delay:.85s}
+.f-acc .t{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.f-acc .t em{width:27px;height:27px;border-radius:9px;background:var(--green-l);color:var(--green-deep);display:grid;place-items:center;flex:none;font-style:normal}
+.f-acc .t b{font-size:.82rem;font-weight:600;letter-spacing:-.01em}
+.f-acc .r{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:10px;border-top:1px solid var(--hair)}
+
+/* D — identity verified */
+.f-id{right:4%;top:4%;width:clamp(194px,20vw,236px);background:var(--green-l);border-radius:20px;padding:17px;
+  box-shadow:0 24px 44px -28px rgba(0,147,63,.4);animation-delay:.65s}
+.f-id .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.f-id .row b{font-size:.85rem;font-weight:600;color:#06512A}
+.f-id .ok{width:21px;height:21px;border-radius:50%;background:var(--green);display:grid;place-items:center;flex:none}
+.f-id .card{background:#fff;border-radius:12px;padding:10px;display:flex;gap:10px;align-items:center}
+.f-id .ph{width:32px;height:40px;border-radius:6px;background:linear-gradient(165deg,#EDF7F1,#D6EADF);flex:none;display:grid;place-items:center;color:var(--green-deep)}
+.f-id .ln{flex:1;display:grid;gap:5px}
+.f-id .ln u{display:block;height:5px;border-radius:3px;background:#EDF1F4;text-decoration:none}
+.f-id .ln u:nth-child(1){width:78%} .f-id .ln u:nth-child(2){width:54%} .f-id .ln u:nth-child(3){width:66%}
+.f-id .r{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:11px;padding-top:10px;border-top:1px solid rgba(0,147,63,.18)}
+.f-id .r .src{color:#06512A} .f-id .r .st{color:#3C7A5B}
+
+/* E — payment receipt */
+.f-pay{right:1%;bottom:14%;width:clamp(188px,20vw,228px);background:#fff;border:1px solid var(--hair);
+  border-radius:18px;padding:14px 15px;box-shadow:0 22px 40px -26px rgba(16,20,46,.35);animation-delay:1.05s}
+.f-pay .t{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.f-pay .t span{font-size:.75rem;color:var(--ink-soft)}
+.f-pay .t b{font-family:var(--d);font-size:1.02rem;font-weight:600;letter-spacing:-.03em}
+.f-pay .r{display:flex;align-items:center;gap:10px;padding-top:10px;border-top:1px solid var(--hair)}
+.f-pay .r em{width:27px;height:27px;border-radius:9px;background:var(--ice);color:var(--cyan-deep);display:grid;place-items:center;flex:none;font-style:normal}
+.f-pay .r small{font-size:.77rem;font-weight:600}
+.f-pay .r i{margin-left:auto;font-size:.7rem;color:var(--green-deep);font-weight:600;font-style:normal}
+
+/* ---------- partners ---------- */
+.pt{border-top:1px solid var(--hair);padding:38px 0 46px;display:flex;align-items:center;gap:28px}
+.pt-l{display:flex;align-items:center;gap:16px;flex:none}
+.pt-l span{font-size:.95rem;color:var(--ink-soft)}
+.pt-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--hair);display:grid;place-items:center;color:var(--ink-soft);flex:none;transition:.2s}
+.pt-btn:hover{border-color:var(--ink);color:var(--ink)}
+.pt-mask{overflow:hidden;flex:1;mask-image:linear-gradient(90deg,transparent,#000 5%,#000 92%,transparent)}
+.pt-track{display:flex;align-items:center;gap:58px;width:max-content;animation:slide 38s linear infinite}
+.pt.paused .pt-track{animation-play-state:paused}
+.pt-track img{height:34px;width:auto;flex:none;opacity:.72;transition:opacity .2s}
+.pt-track img:hover{opacity:1}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* stat cards */
+.sw{position:relative;overflow:hidden;background:linear-gradient(135deg,#10142E 0%,#1D204F 46%,#16304A 100%)}
+.sw::before{content:"";position:absolute;width:900px;height:900px;left:-280px;bottom:-460px;
+  background:radial-gradient(circle,rgba(0,176,78,.34),rgba(0,176,78,.08) 42%,transparent 66%);pointer-events:none}
+.sw::after{content:"";position:absolute;width:720px;height:720px;right:-240px;top:-320px;
+  background:radial-gradient(circle,rgba(29,32,79,.9),transparent 62%);pointer-events:none}
+.sw .w{position:relative}
+.sw .shead{margin-bottom:46px}
+.dark .shead p{color:var(--onvoid-soft)}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.sc{position:relative;background:#fff;border-radius:20px;padding:30px 26px 26px;min-height:226px;
+  display:flex;flex-direction:column;text-align:left;overflow:hidden;
+  transition:box-shadow .3s,transform .3s}
+.sc::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(6,24,30,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(6,24,30,.05) 1px,transparent 1px);
+  background-size:30px 30px}
+.sc::after{content:"";position:absolute;inset:0;opacity:0;pointer-events:none;
+  background:linear-gradient(135deg,#8DE88B 0%,#49DDA0 52%,#36CFC2 100%);transition:opacity .34s}
+.sc:hover,.sc:focus-visible{box-shadow:0 26px 54px -32px rgba(0,0,0,.8);transform:translateY(-3px)}
+.sc:hover::after,.sc.flip::after,.sc:focus-visible::after{opacity:1}
+.sc-num{position:relative;z-index:2;font-family:var(--d);font-weight:300;
+  font-size:clamp(2.1rem,3.5vw,3.1rem);letter-spacing:-.05em;line-height:.95;color:var(--ink);
+  margin-bottom:auto;transition:opacity .26s}
+.sc-lbl{position:relative;z-index:2;font-size:1rem;color:var(--ink-soft);line-height:1.45;max-width:26ch;
+  margin-top:26px;transition:opacity .26s}
+.sc-tell{position:absolute;z-index:3;left:26px;right:26px;top:30px;font-size:.99rem;line-height:1.42;
+  color:#06231A;font-weight:500;letter-spacing:-.015em;opacity:0;transform:translateY(6px);
+  transition:opacity .3s,transform .3s}
+.sc:hover .sc-num,.sc:hover .sc-lbl,.sc.flip .sc-num,.sc.flip .sc-lbl,
+.sc:focus-visible .sc-num,.sc:focus-visible .sc-lbl{opacity:0}
+.sc:hover .sc-tell,.sc.flip .sc-tell,.sc:focus-visible .sc-tell{opacity:1;transform:none}
+.sw-note{margin-top:26px;font-size:.88rem;color:var(--onvoid-soft)}
+
+@media (max-width:1060px){.sgrid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){
+  .sgrid{grid-template-columns:1fr;gap:14px}
+  .aurora-in{padding:34px 24px;gap:30px}
+  .tgrid{grid-template-columns:1fr}
+  .sc{min-height:198px;padding:26px 22px}
+  .sc-tell{left:22px;right:22px;top:26px;font-size:1rem}
+}
+
+/* product tabs */
+.pf-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.pf-tab{padding:21px 16px;border-radius:17px 17px 0 0;background:var(--haze-2);color:var(--ink-soft);
+  font-family:var(--d);font-weight:600;font-size:clamp(.88rem,1.15vw,1.02rem);letter-spacing:-.035em;
+  position:relative;transition:background .2s,color .2s}
+.pf-tab:hover{background:#D5E2DF;color:var(--ink)}
+.pf-tab[aria-selected=true]{background:var(--void);color:var(--onvoid)}
+.pf-prog{position:absolute;left:14px;right:14px;top:0;height:2.4px;border-radius:3px;background:rgba(0,176,78,.22);overflow:hidden;opacity:0}
+.pf-tab[aria-selected=true] .pf-prog{opacity:1}
+.pf-prog i{position:absolute;inset:0;background:var(--green);transform-origin:left center;transform:scaleX(0);display:block}
+.pf-tab[aria-selected=true] .pf-prog i{animation:pfp 10s linear forwards}
+.pf.paused .pf-tab[aria-selected=true] .pf-prog i{animation-play-state:paused}
+@keyframes pfp{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.pf-tab[aria-selected=true]::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:12px;background:var(--void)}
+.pf-panel{background:var(--void);color:var(--onvoid);border-radius:0 0 26px 26px;overflow:hidden}
+.pf-view{display:none}
+.pf-view.on{display:grid;grid-template-columns:1.02fr .98fr;gap:46px;padding:52px 46px;align-items:center}
+.pf-pt{display:flex;gap:16px;margin-bottom:26px}
+.pf-pt:last-of-type{margin-bottom:0}
+.pf-chk{width:21px;height:21px;flex:none;color:var(--green);margin-top:3px}
+.pf-pt h3{font-family:var(--b);font-size:1.12rem;font-weight:600;letter-spacing:-.02em;margin-bottom:7px;color:var(--onvoid)}
+.pf-pt p{font-size:1rem;color:var(--onvoid-soft);line-height:1.5;max-width:42ch}
+.pf-certs{display:flex;gap:34px;flex-wrap:wrap;margin:40px 0 34px;padding-top:30px;border-top:1px solid var(--hair-dark)}
+.pf-cert{display:flex;align-items:center;gap:11px;font-size:.92rem;color:var(--onvoid)}
+.pf-cert svg{color:var(--onvoid-soft);flex:none}
+.pf-act{display:flex;gap:11px;flex-wrap:wrap}
+.b-mute{background:rgba(255,255,255,.12);color:var(--onvoid)}
+.b-mute:hover{background:rgba(255,255,255,.2)}
+
+/* panel artwork */
+.pv{position:relative;border-radius:22px;aspect-ratio:1/.82;overflow:hidden;
+  background:linear-gradient(145deg,#DCE9EC 0%,#CFDFE4 46%,#C6D9E0 100%)}
+.pv-win{position:absolute;left:8%;top:21%;width:62%;background:#fff;border-radius:14px;padding:18px 16px;
+  box-shadow:0 26px 50px -30px rgba(6,24,30,.55)}
+.pv-win b{display:block;font-family:var(--d);font-size:.76rem;font-weight:600;letter-spacing:-.035em;color:var(--ink);line-height:1.3;margin-bottom:13px}
+.pv-win u{display:block;height:6px;border-radius:3px;background:#E7EEF0;text-decoration:none;margin-bottom:7px}
+.pv-card{margin-top:13px;border:1px solid #E4ECEE;border-radius:9px;padding:11px;display:flex;gap:10px;align-items:center}
+.pv-card em{width:34px;height:40px;border-radius:5px;background:linear-gradient(160deg,#E8F1EC,#D6E7DD);flex:none;display:grid;place-items:center;color:var(--green-deep);font-style:normal}
+.pv-card div{flex:1;display:grid;gap:5px}
+.pv-card u{margin:0;height:5px}
+.pv-ph{position:absolute;right:7%;top:12%;width:33%;aspect-ratio:1/2.03;background:#13303A;border-radius:21px;padding:5px;
+  box-shadow:0 30px 56px -24px rgba(6,24,30,.7)}
+.pv-scr{width:100%;height:100%;background:#fff;border-radius:17px;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:16px 10px 12px}
+.pv-scr p{font-size:.6rem;color:var(--ink-soft);text-align:center;line-height:1.35;margin-bottom:10px}
+.pv-face{width:78%;aspect-ratio:1/1.18;border-radius:999px/46%;background:linear-gradient(170deg,#E9F2EE,#D3E6DC);display:grid;place-items:center;color:var(--green-deep);position:relative;overflow:hidden}
+.pv-face svg{width:56%}
+.pv-ring{position:absolute;inset:7%;border:1.6px dashed rgba(12,107,65,.4);border-radius:999px/46%}
+.pv-foot{margin-top:auto;width:100%;display:grid;gap:5px}
+.pv-foot u{display:block;height:5px;border-radius:3px;background:#EDF2F3;text-decoration:none}
+.pv-foot div{margin-top:5px;height:21px;border-radius:999px;background:var(--green)}
+
+@media (max-width:1060px){
+  .pf-tabs{grid-template-columns:repeat(5,minmax(132px,1fr));overflow-x:auto;scrollbar-width:none}
+  .pf-tabs::-webkit-scrollbar{display:none}
+  .pf-view.on{grid-template-columns:1fr;padding:34px 26px;gap:32px}
+  .pv{aspect-ratio:1/.72;order:-1}
+}
+@media (max-width:620px){
+  .pf-tabs{grid-template-columns:repeat(5,minmax(124px,1fr))}
+  .pf-tab{padding:16px 12px;font-size:.86rem}
+  .pf-view.on{padding:28px 20px}
+  .pf-certs{gap:16px;margin:30px 0 26px;flex-direction:column}
+  .pv-win{left:5%;width:66%}
+  .pv-ph{right:4%;width:36%}
+}
+
+/* finder */
+.fd{display:grid;grid-template-columns:1fr .95fr;gap:80px;align-items:center}
+.fd-l h2{color:var(--onvoid);margin-bottom:18px}
+.fd-l p{color:var(--onvoid-soft);font-size:1rem;margin-bottom:26px}
+
+
+.fglass{position:relative;border-radius:28px;padding:22px;height:420px;display:flex;flex-direction:column;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(22px) saturate(130%);
+  -webkit-backdrop-filter:blur(22px) saturate(130%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 30px 60px -40px rgba(0,0,0,.9)}
+.fglass::before{content:"";position:absolute;inset:0;border-radius:28px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 42%)}
+.fglass > *{position:relative}
+.sbox{display:flex;align-items:center;gap:11px;height:40px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:0 18px;flex:none}
+.sbox input{flex:1;background:none;border:0;color:var(--onvoid);font:inherit;font-size:.95rem;padding:0;height:100%;outline:none}
+.sbox input::placeholder{color:rgba(139,164,169,.75)}
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 18px;flex:none}
+.cat{padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);font-size:.83rem;color:var(--onvoid-soft);transition:.18s}
+.cat[aria-pressed=true]{background:var(--onvoid);color:var(--void);border-color:var(--onvoid);font-weight:600}
+.svcs{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:64px;gap:10px;flex:1;align-content:start}
+.svc{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:0 12px;display:flex;gap:10px;align-items:center;transition:background .18s,transform .18s;overflow:hidden}
+.svc:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
+.svc em{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:.68rem;flex:none;color:#fff;letter-spacing:-.02em}
+.svc b{display:block;font-size:.82rem;font-weight:500;line-height:1.25;color:var(--onvoid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.svc span{display:block;font-size:.72rem;color:var(--onvoid-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nores{display:none;color:var(--onvoid-soft);padding:20px 0;font-size:.93rem;flex:1}
+.fd-f{margin-top:16px;font-size:.85rem;color:var(--onvoid-soft);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;flex:none}
+
+/* audience */
+.auds{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.aud{border-radius:30px;padding:44px 40px;display:flex;flex-direction:column}
+.aud-me{background:var(--haze)}
+.aud-biz{background:var(--void);color:var(--onvoid)}
+.aud h3{font-family:var(--d);font-size:clamp(1.25rem,1.9vw,1.6rem);font-weight:600;letter-spacing:-.04em;margin-bottom:14px}
+.aud > p{font-size:1rem;color:var(--ink-soft);margin-bottom:28px;max-width:38ch}
+.aud-biz > p{color:var(--onvoid-soft)}
+.alist{list-style:none;display:grid;gap:14px;margin-bottom:30px}
+.alist li{display:flex;gap:13px;font-size:.96rem;align-items:flex-start}
+.alist i{width:7px;height:7px;border-radius:2px;background:var(--green);flex:none;margin-top:8px;display:block}
+.prc{border-top:1px solid var(--hair);padding-top:20px;margin-bottom:26px;font-size:.94rem}
+.aud-biz .prc{border-color:var(--hair-dark)}
+.prc b{font-weight:600}
+.prc span{display:block;color:var(--ink-soft);font-size:.88rem;margin-top:5px}
+.aud-biz .prc span{color:var(--onvoid-soft)}
+.aact{display:flex;gap:11px;flex-wrap:wrap;margin-top:auto}
+
+/* verify — aurora */
+.aurora{position:relative;border-radius:34px;overflow:hidden;box-shadow:0 40px 90px -56px rgba(10,12,28,.8);
+  background:
+    radial-gradient(78% 86% at 50% 112%, rgba(60,230,130,.95) 0%, rgba(0,176,78,.78) 22%, rgba(0,140,66,.4) 44%, rgba(0,110,54,.14) 62%, transparent 78%),
+    radial-gradient(60% 70% at 12% 108%, rgba(29,32,79,.85), transparent 70%),
+    radial-gradient(55% 65% at 88% 104%, rgba(22,48,74,.7), transparent 72%),
+    #1D204F}
+.aurora::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 50% at 50% 0%, rgba(29,32,79,.65), transparent 70%)}
+.aurora-in{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;padding:60px 54px}
+.aurora-in h2{color:#fff;margin-bottom:18px;max-width:18ch}
+.aurora-in > div > p{color:rgba(255,255,255,.72);font-size:1.06rem;max-width:44ch}
+.aurora-note{margin-top:14px;font-size:.93rem !important;color:rgba(255,255,255,.5) !important}
+.glass{position:relative;border-radius:26px;padding:34px 30px 30px;text-align:center;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(22px) saturate(140%);-webkit-backdrop-filter:blur(22px) saturate(140%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 24px 50px -30px rgba(0,0,0,.6)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:26px;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.08),transparent 46%)}
+.glass-i{position:relative;width:56px;height:56px;border-radius:18px;margin:0 auto 18px;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.2)}
+.glass h3{position:relative;font-family:var(--d);font-size:1.12rem;font-weight:600;letter-spacing:-.035em;color:#fff;margin-bottom:9px}
+.glass > p{position:relative;font-size:.93rem;color:rgba(255,255,255,.7);margin-bottom:22px}
+.b-glass{position:relative;background:rgba(255,255,255,.95);color:#0A0C1C;padding:13px 26px;font-size:.92rem}
+.b-glass:hover{background:#fff}
+.glass-f{position:relative;display:block;margin-top:18px;font-size:.84rem;color:rgba(255,255,255,.55)}
+
+/* trust cards */
+.mint{background:#E9F4EE}
+.tc-head{text-align:center;max-width:46ch;margin:0 auto 46px}
+.tc-head .tag{display:inline-block;background:#fff;border-radius:999px;padding:7px 17px;font-size:.84rem;font-weight:600;margin-bottom:20px}
+.tc-head h2{margin-bottom:16px}
+.tc-head p{color:var(--ink-soft);font-size:1.04rem}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tc{background:#fff;border-radius:22px;padding:30px 28px 32px;display:flex;flex-direction:column}
+.tc-i{width:44px;height:44px;border-radius:13px;background:var(--green-l);color:var(--green-deep);display:grid;place-items:center;margin-bottom:46px}
+.tc h3{font-family:var(--d);font-size:1.18rem;font-weight:600;letter-spacing:-.035em;line-height:1.2;margin-bottom:12px}
+.tc p{font-size:.95rem;color:var(--ink-soft);line-height:1.5}
+.tc-cta{display:flex;justify-content:center;margin-top:40px}
+.arrowbtn{display:inline-flex;align-items:center;gap:14px;background:var(--deep);color:#fff;border-radius:999px;padding:9px 9px 9px 26px;font-weight:600;font-size:.97rem;transition:.2s}
+.arrowbtn:hover{background:var(--void)}
+.arrowbtn span{width:36px;height:36px;border-radius:50%;background:var(--green);display:grid;place-items:center;flex:none}
+
+/* news */
+.nws{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:stretch}
+.feat{border:1px solid var(--hair);border-radius:28px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s;height:100%}
+.feat:hover{border-color:var(--ink)}
+.feat-art{flex:1;min-height:200px;background:linear-gradient(140deg,var(--haze-2),var(--haze));display:grid;place-items:center;color:var(--cyan-deep);position:relative}
+.feat-k{position:absolute;top:20px;left:20px;background:#fff;border-radius:999px;padding:7px 14px;font-size:.8rem;font-weight:600;color:var(--green-deep)}
+.feat-b{padding:28px 30px 32px}
+.feat h3{font-family:var(--d);font-size:clamp(1.05rem,1.6vw,1.32rem);font-weight:600;letter-spacing:-.035em;line-height:1.22;margin:12px 0 14px}
+.feat p{font-size:.96rem;color:var(--ink-soft);max-width:50ch;margin-bottom:18px}
+.dt{font-size:.85rem;color:var(--ink-soft)}
+.nlist{display:grid;gap:12px;align-content:stretch}
+.nit{display:flex;gap:16px;padding:14px;border:1px solid var(--hair);border-radius:18px;align-items:center;transition:border-color .2s,transform .2s;background:#fff}
+.nit:hover{border-color:var(--ink);transform:translateX(3px)}
+.nit em{width:64px;height:64px;border-radius:14px;background:var(--haze);display:grid;place-items:center;color:var(--cyan-deep);flex:none;font-style:normal}
+.nit h3{font-size:.99rem;font-weight:600;line-height:1.35;margin-top:6px;letter-spacing:-.015em;font-family:var(--b)}
+
+/* footer */
+.ft{position:relative;overflow:hidden;padding:0;color:var(--onvoid);
+  background:
+    radial-gradient(70% 80% at 8% 0%, rgba(0,176,78,.28), transparent 62%),
+    radial-gradient(60% 70% at 92% 104%, rgba(0,176,78,.16), transparent 66%),
+    linear-gradient(140deg,#10142E 0%,#1D204F 52%,#141735 100%)}
+.ft-top{position:relative;display:grid;grid-template-columns:auto 1fr 1fr 1fr;column-gap:40px;row-gap:40px;padding:72px 0 64px;align-items:start}
+.ft-top .ghost{margin-right:112px}
+.ghost{line-height:0}
+.ghost-svg{width:min(100%,552px);height:auto}
+.ghost-svg path{fill:rgba(255,255,255,.14)}
+.ft-col ul{list-style:none;display:grid;gap:22px}
+.ft-col a{font-size:1rem;color:rgba(255,255,255,.66);transition:color .2s}
+.ft-col a:hover{color:#fff}
+.ft-end{position:relative;border-top:1px solid rgba(255,255,255,.14);padding:28px 0 36px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.ft-end .cp{font-size:.95rem;color:rgba(255,255,255,.72)}
+.ft-r{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.ft-r a{font-size:.95rem;color:rgba(255,255,255,.66)}
+.ft-r a:hover{color:#fff}
+.hot{display:inline-flex;align-items:center;gap:9px;background:var(--green);color:#fff;
+  border-radius:999px;padding:10px 20px;font-weight:700;font-size:1rem}
+
+
+@media (max-width:1180px){ .f-acc{left:3%} }
+@media (max-width:980px){
+  .nav{height:78px;gap:20px} .nv{display:none} .burger{display:grid}
+  .lang,.iconbtn{display:none}
+  .stage{height:400px}
+  .f-doc{display:none}
+  .f-id{right:-2%;top:2%;width:200px} .f-pay{right:-2%;bottom:18%;width:190px}
+  .f-acc{left:-2%;top:calc(40% + 48px);width:200px}
+}
+@media (max-width:640px){
+  .w{padding:0 20px}
+  .npill span{display:none}
+  .stage{height:340px;margin-top:34px}
+  .cta .btn{flex:1}
+  .f-id,.f-pay{display:none}
+  .f-acc{left:0;top:calc(30% + 48px);width:190px}
+  .pt{flex-direction:column;align-items:flex-start;gap:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important}
+  .f{opacity:1;transform:none}
+  .f-doc .sig path{stroke-dashoffset:0}
+  .beam{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  html{scroll-behavior:auto}
+}
+
+
+@media (max-width:1060px){.sgrid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){
+  .sgrid{grid-template-columns:1fr;gap:14px}
+  .aurora-in{padding:34px 24px;gap:30px}
+  .tgrid{grid-template-columns:1fr}
+  .sc{min-height:198px;padding:26px 22px}
+  .sc-tell{left:22px;right:22px;top:26px;font-size:1rem}
+}
+
+@media (max-width:1060px){
+  .shead h2,.shead p{white-space:normal}
+  .hgrid,.auds,.nws,.fd,.aurora-in{grid-template-columns:1fr}
+  .svcs{grid-template-columns:1fr 1fr}
+  .fglass{height:auto}
+  .tgrid{grid-template-columns:1fr 1fr}
+  .step:nth-child(odd){border-right-color:var(--hair)}
+  .trust{grid-template-columns:1fr;gap:0}
+  .svcs{grid-template-columns:1fr 1fr}
+  .ft-top{grid-template-columns:1fr 1fr}
+  .nv,.lg{display:none}
+  .burger{display:grid}
+  .mega{display:none !important}
+  .sec{padding:76px 0}
+}
+@media (max-width:620px){
+  body{font-size:16px}
+  .w{padding:0 20px}
+  .sec{padding:60px 0}.sec-sm{padding:50px 0}
+  .svcs{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr 1fr}
+  .ghost{grid-column:1/-1}
+  .step{border-bottom-color:var(--hair)}
+  .aud{padding:30px 24px;border-radius:24px}
+  .hcta .btn{flex:1;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  html{scroll-behavior:auto}
+}
+
+
+
+/* =============================================================
+   SİMA v7 — motion enhancement prototype
+   Progressive enhancement: content remains visible if JS is off.
+   All timings grouped here for easy refinement.
+   ============================================================= */
+:root { --motion-ease: cubic-bezier(.22,1,.36,1); }
+html { scroll-padding-top: 88px; }
+.hdr { position:sticky; top:0; z-index:100; transition:box-shadow .3s ease,background .3s ease; }
+.hdr.is-scrolled { box-shadow:0 8px 26px rgba(16,20,46,.07); background:rgba(255,255,255,.96); }
+@supports (backdrop-filter:blur(14px)) {
+  .hdr.is-scrolled { backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+}
+/* Header/CTA polish */
+.btn,.npill,.arrowbtn { will-change:auto; transition:transform .42s var(--motion-ease),box-shadow .42s var(--motion-ease),background-color .22s ease,border-color .22s ease; }
+@media(hover:hover) and (pointer:fine) {
+  .btn:hover,.npill:hover,.arrowbtn:hover {transform:translateY(-2px);box-shadow:0 12px 26px -18px rgba(16,20,46,.52)}
+}
+/* Intro: staggered presentation of the existing hero and stage */
+.motion-ready .hero .head h1,
+.motion-ready .hero .head p,
+.motion-ready .hero .head .cta,
+.motion-ready .hero .stage {opacity:0;transform:translate3d(0,25px,0);}
+.motion-ready.motion-hero-start .hero .head h1,
+.motion-ready.motion-hero-start .hero .head p,
+.motion-ready.motion-hero-start .hero .head .cta,
+.motion-ready.motion-hero-start .hero .stage {
+ opacity:1;transform:translate3d(0,0,0);
+ transition:transform .95s var(--motion-ease),opacity .95s ease;
+}
+.motion-ready.motion-hero-start .hero .head h1 {transition-delay:.04s;}
+.motion-ready.motion-hero-start .hero .head p {transition-delay:.17s;}
+.motion-ready.motion-hero-start .hero .head .cta {transition-delay:.3s;}
+.motion-ready.motion-hero-start .hero .stage {transition-delay:.4s;}
+/* Generic section entrances: apply only after the browser has JS */
+.motion-ready .motion-reveal {opacity:0;transform:translate3d(0,44px,0);transition:opacity .8s ease,transform .95s var(--motion-ease);transition-delay:var(--reveal-delay,0ms);}
+.motion-ready .motion-reveal.is-visible {opacity:1;transform:translate3d(0,0,0);}
+/* Make cards feel responsive without changing content */
+.sc,.aud,.tc,.feat,.nit,.fglass,.glass {transition:transform .55s var(--motion-ease), box-shadow .55s var(--motion-ease), border-color .3s ease;}
+@media(hover:hover) and (pointer:fine){
+  .aud:hover,.tc:hover,.fglass:hover,.glass:hover {transform:translate3d(0,-5px,0);box-shadow:0 25px 45px -32px rgba(16,20,46,.38);}
+  .feat:hover {transform:translate3d(0,-3px,0);}
+}
+/* Decorative hero depth; do not shift interactive controls */
+.hero .el {transition:translate .12s linear;translate:0 var(--hero-depth,0px);}
+/* Aurora's moving glow: CSS variables updated during scroll */
+.aurora {isolation:isolate;}
+.aurora::before {content:"";position:absolute;inset:-30%;z-index:0;pointer-events:none;opacity:.65;
+ background:radial-gradient(ellipse at 50% 100%,rgba(0,221,103,.19),transparent 55%);
+ transform:translate3d(var(--glow-x,0px),var(--glow-y,0px),0);
+}
+/* Count-up text must not wrap during the animation */
+.sc-num {font-variant-numeric:tabular-nums;}
+/* Scroll cue (visual only, not a fake link) */
+.hero .stage::after {content:"";position:absolute;left:50%;bottom:13px;width:1px;height:32px;opacity:.35;
+ background:linear-gradient(to bottom,transparent,var(--green));transform:translateX(-50%);pointer-events:none;}
+@media(max-width:980px) { .hdr {position:relative;} }
+@media(prefers-reduced-motion:reduce) {
+  .motion-ready .hero .head h1,.motion-ready .hero .head p,.motion-ready .hero .head .cta,
+  .motion-ready .hero .stage,.motion-ready .motion-reveal {opacity:1!important;transform:none!important;transition:none!important;}
+  .hero .el {translate:none!important;}
+  .aurora::before {display:none;}
+  html {scroll-behavior:auto;}
+}
+
+
+
+/* =============================================================
+   SİMA v8 — Finmax-inspired light hero: pinned cinematic scroll
+   Scoped to .hero-finmax; all other site components untouched.
+   ============================================================= */
+.hero.hero-finmax {padding:0;overflow:visible;height:calc(100svh + 760px);min-height:1250px;background:#fff;position:relative;isolation:isolate;}
+.hero-finmax .hero-pin{position:sticky;top:92px;height:calc(100svh - 92px);min-height:620px;overflow:hidden;background:#fff;isolation:isolate;}
+.hero-finmax .hero-glow{position:absolute;z-index:0;left:50%;bottom:-45%;width:142%;height:102%;border-radius:50%;pointer-events:none;
+ background:radial-gradient(ellipse at 50% 54%,rgba(29,215,74,.67) 0%,rgba(109,229,125,.56) 23%,rgba(175,244,190,.33) 48%,rgba(218,253,226,.15) 64%,transparent 77%);
+ transform:translate3d(-50%,var(--glow-shift,0px),0);opacity:var(--hero-glow-opacity,1);will-change:transform,opacity;}
+.hero-finmax .hero-grid{position:absolute;z-index:0;inset:45% 0 0;opacity:.22;pointer-events:none;mask-image:linear-gradient(to bottom,transparent,#000 65%,transparent);
+ background-image:radial-gradient(rgba(0,120,53,.24) .7px,transparent .7px);background-size:28px 28px;}
+.hero-finmax .hero-content{position:relative;z-index:1;width:100%;padding-top:clamp(28px,4.1vh,54px);}
+.hero-finmax .head {max-width:1100px;position:relative;z-index:4;transform:translate3d(0,var(--copy-y,0px),0);opacity:var(--copy-opacity,1);will-change:transform,opacity;}
+.hero-finmax .head h1{font-size:clamp(2.2rem,4.25vw,3.7rem);letter-spacing:-.056em;line-height:1.06;margin-bottom:17px;}
+.hero-finmax .head p{max-width:67ch;margin-bottom:24px;font-size:clamp(.97rem,1.12vw,1.08rem);}
+.hero-finmax .hero-eyebrow{display:inline-flex;align-items:center;gap:9px;margin-bottom:20px;padding:8px 15px;border:1px solid #DFEDE3;background:rgba(255,255,255,.73);border-radius:999px;font:500 .75rem var(--b);color:#245739;letter-spacing:.025em;}
+.hero-finmax .eyebrow-dot{width:7px;height:7px;background:#00B04E;border-radius:50%;box-shadow:0 0 0 4px rgba(0,176,78,.12);}
+.hero-finmax .cta .btn{padding:13px 23px;font-size:.87rem;}
+.hero-finmax .stage{height:clamp(355px,47vh,510px);margin-top:clamp(16px,3.3vh,35px);position:relative;z-index:2;overflow:visible;will-change:transform,opacity;}
+/* Replace decorative semicircles with minimal radial detail */
+.hero-finmax .hero-pulse{position:absolute;left:50%;top:76%;width:400px;aspect-ratio:1;border:1px solid rgba(55,185,96,.11);border-radius:50%;transform:translate(-50%,-50%) scale(var(--pulse-s,1));opacity:var(--pulse-opacity,.8);pointer-events:none;}
+.hero-finmax .pulse-two{width:560px;border-color:rgba(55,185,96,.07);}
+/* Panels visually match the dark charcoal, glossy mini-widgets of the reference. */
+.hero-finmax .f{position:absolute;z-index:3;animation:none!important;opacity:var(--panel-opacity,1);border:1px solid rgba(255,255,255,.1);background:linear-gradient(145deg,#35373A,#25282B);color:#fff;border-radius:15px;
+ box-shadow:0 22px 42px -22px rgba(14,30,18,.30),inset 0 1px 0 rgba(255,255,255,.14);
+ transform:translate3d(var(--tx,0px),var(--ty,0px),0) scale(var(--panel-scale,1)) rotate(var(--panel-rotate,0deg));transform-origin:center center;will-change:transform,opacity;}
+.hero-finmax .f-doc,.hero-finmax .f-id{width:clamp(178px,15.7vw,217px);height:auto;min-height:147px;padding:15px 16px;}
+.hero-finmax .f-doc{left:9%;top:5%;}
+.hero-finmax .f-id{right:9%;top:6%;}
+.hero-finmax .floating-eyebrow{display:flex;align-items:center;gap:6px;font-size:.72rem;color:#E9F3EA;letter-spacing:.005em;font-weight:500;}
+.hero-finmax .fl-live{display:inline-block;width:8px;height:8px;border-radius:50%;background:#70EA87;box-shadow:0 0 0 3px rgba(112,234,135,.1);}
+.hero-finmax .fl-plus{margin-left:auto;color:#A5EFAF;font-size:1rem;}
+.hero-finmax .fl-label{display:block;font-size:.73rem;color:rgba(255,255,255,.64);margin-top:16px;}
+.hero-finmax .fl-value{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:1px;font-family:var(--d);font-size:1.05rem;font-weight:500;letter-spacing:-.045em;color:#fff;line-height:1.3;}
+.hero-finmax .fl-value svg{flex:none;color:#8BEF9B;}
+.hero-finmax .fl-sep{height:1px;background:rgba(255,255,255,.12);margin-top:10px;}
+.hero-finmax .fl-footer{display:flex;justify-content:space-between;gap:5px;margin-top:9px;font-size:.63rem;color:#B8C9BE;}
+.hero-finmax .fl-footer span{color:#82EA9A;}
+.hero-finmax .f-acc{left:14%;top:62%;display:flex;align-items:center;gap:9px;width:clamp(185px,19vw,235px);padding:12px 13px;}
+.hero-finmax .acc-icon{display:grid;place-items:center;width:32px;height:32px;flex:none;background:rgba(112,234,135,.16);color:#85EDA4;border-radius:10px;}
+.hero-finmax .acc-text{display:flex;flex-direction:column;line-height:1.26;gap:3px;white-space:nowrap;}
+.hero-finmax .acc-text b{font-size:.75rem;font-weight:600;}
+.hero-finmax .acc-text small{font-size:.66rem;color:#B4C9B9;}
+.hero-finmax .acc-ok{margin-left:auto;border-radius:50%;background:#77DC90;width:19px;height:19px;flex:none;display:grid;place-items:center;color:#063E23;font-weight:800;font-size:.7rem;}
+.hero-finmax .f-pay{right:10%;top:60%;display:flex;align-items:center;gap:11px;width:clamp(210px,20vw,256px);padding:11px 12px;}
+.hero-finmax .pay-avatars{display:flex;align-items:center;flex:none;padding-left:1px;}
+.hero-finmax .pay-avatars span{border:2px solid #2B3030;margin-left:-6px;display:grid;place-items:center;width:25px;height:25px;flex:none;border-radius:50%;color:#113720;font-size:.7rem;font-weight:700;background:#8FDEA1;}
+.hero-finmax .pay-avatars span:first-child{margin-left:0;background:#D3ACF8;color:#352148;}
+.hero-finmax .pay-avatars span:last-child{background:#E0C7A4;}
+.hero-finmax .pay-copy{display:flex;flex-direction:column;gap:3px;line-height:1.2;}
+.hero-finmax .pay-copy b{font-size:.76rem;font-weight:600;}
+.hero-finmax .pay-copy span{font-size:.65rem;white-space:nowrap;color:#B9C8BE;}
+.hero-finmax .pay-arrow{margin-left:auto;color:#8DEAA0;font-weight:600;}
+.hero-finmax .f-check{padding:0;display:grid;place-items:center;background:#66DD85;border:0;border-radius:50%;color:#10321E;width:32px;height:32px;font-size:.9rem;box-shadow:0 8px 20px rgba(26,171,84,.24);}
+.hero-finmax .f-check-l{left:7%;top:1%;}
+.hero-finmax .f-check-r{right:3%;top:49%;}
+/* Phone has higher stacking than floating widgets: cards really go behind it. */
+.hero-finmax .phone{z-index:9;left:50%;bottom:auto;top:10%;width:clamp(222px,19.5vw,287px);aspect-ratio:1/1.96;padding:7px 7px 0;border-radius:38px 38px 0 0;
+ background:#172024;box-shadow:0 36px 68px -18px rgba(11,61,34,.25),0 0 0 1px rgba(14,21,27,.13),inset 0 1px 0 rgba(255,255,255,.25);
+ transform:translate3d(calc(-50% + var(--phone-x,0px)),var(--phone-y,0px),0) scale(var(--phone-scale,1));transform-origin:50% 38%;will-change:transform,opacity;opacity:var(--phone-opacity,1);}
+.hero-finmax .scr{border-radius:31px 31px 0 0;padding:22px 17px 18px;display:flex;align-items:center;background:linear-gradient(170deg,#E1FFE4 0%,#EBFFF0 52%,#F9FFFA 100%);}
+.hero-finmax .scr::before{height:19px;width:43%;border-radius:0 0 14px 14px;background:#172024;}
+.hero-finmax .sbar{width:100%;padding:0 1px;margin:0 0 28px;}
+.hero-finmax .sbar b{font-size:.77rem;letter-spacing:-.02em;color:#11351E;font-weight:700;}
+.hero-finmax .brand-spot{display:inline-grid;place-items:center;color:#00A74B;font-size:.8rem;}
+.hero-finmax .phone-icons{font-size:1.05rem;line-height:1;color:#0B5036;}
+.hero-finmax .phone-top-text{text-align:center;width:100%;}
+.hero-finmax .phone-top-text small{font-size:.61rem;color:#47745A;display:block;margin-bottom:8px;}
+.hero-finmax .phone-top-text h3{font:600 clamp(.83rem,1.12vw,1.03rem)/1.2 var(--d);letter-spacing:-.04em;color:#10351F;}
+.hero-finmax .phone-top-text p{font-size:.62rem;margin:7px auto 0;color:#55816A;}
+.hero-finmax .faceart{width:73%;margin-top:12px;}
+.hero-finmax .faceart img{mix-blend-mode:multiply;}
+.hero-finmax .phone-status{display:flex;align-items:center;gap:6px;margin:12px 0 0;font-size:.63rem;color:#17633B;font-weight:600;}
+.hero-finmax .phone-green-check{display:grid;place-items:center;border-radius:50%;background:#15B859;color:#fff;width:17px;height:17px;font-size:.67rem;}
+.hero-finmax .phone-actions{display:flex;align-items:center;justify-content:center;gap:7px;margin:22px 0 0;flex-wrap:wrap;}
+.hero-finmax .phone-actions span{font-size:.54rem;color:#2F7050;border:1px solid #D0EBD5;border-radius:999px;padding:4px 7px;background:rgba(255,255,255,.55);}
+.hero-finmax .hero-scroll-tip{font-size:.7rem;font-weight:500;letter-spacing:.035em;color:#35724B;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px;opacity:var(--tip-opacity,1);}
+.hero-finmax .hero-scroll-tip>span{width:19px;height:28px;border:1px solid rgba(30,112,60,.35);border-radius:999px;position:relative;display:inline-block;}
+.hero-finmax .hero-scroll-tip>span::after{content:"";position:absolute;top:5px;left:50%;width:3px;height:6px;background:#32A95F;border-radius:4px;transform:translateX(-50%);animation:scroll-dot 1.7s ease infinite;}
+@keyframes scroll-dot{0%{translate:0 0;opacity:.3}55%{translate:0 8px;opacity:1}100%{translate:0 9px;opacity:0}}
+/* Prevent inherited v7 stage pseudo element from overlapping phone */
+.hero-finmax .stage::after{display:none;}
+@media(max-width:1060px){
+ .hero-finmax .f-doc{left:2.5%}.hero-finmax .f-id{right:2.5%}
+ .hero-finmax .f-acc{left:3%}.hero-finmax .f-pay{right:2%}
+ .hero-finmax .f-check-l{left:1%}
+}
+@media(max-width:980px){
+ .hero.hero-finmax{height:calc(100svh + 620px);min-height:1150px;}
+ .hero-finmax .hero-pin{top:0;height:100svh;min-height:620px;}
+ .hero-finmax .hero-content{padding-top:clamp(32px,5vh,52px);}
+ .hero-finmax .head h1{font-size:clamp(2rem,5.4vw,3.15rem);}
+ .hero-finmax .f-doc,.hero-finmax .f-id{width:168px;padding:12px;}
+ .hero-finmax .f-acc,.hero-finmax .f-pay{width:175px;}
+ .hero-finmax .phone{width:clamp(202px,29vw,255px);}
+ .hero-finmax .f-acc{left:0;top:69%}.hero-finmax .f-pay{right:0;top:70%}
+ .hero-finmax .hero-glow{width:195%;}
+}
+@media(max-width:640px){
+ .hero.hero-finmax{height:calc(100svh + 440px);min-height:990px;}
+ .hero-finmax .hero-pin{height:100svh;min-height:590px;}
+ .hero-finmax .hero-content{padding-top:19px;}
+ .hero-finmax .hero-eyebrow{font-size:.64rem;margin-bottom:15px;padding:7px 12px;}
+ .hero-finmax .head h1{font-size:clamp(1.74rem,6vw,2.3rem);margin-bottom:12px;}
+ .hero-finmax .head p{font-size:.83rem;line-height:1.45;margin-bottom:16px;max-width:42ch;}
+ .hero-finmax .cta{gap:8px;flex-wrap:nowrap;}
+ .hero-finmax .cta .btn{padding:10px 11px;font-size:.69rem;flex:initial;white-space:nowrap;}
+ .hero-finmax .stage{height:clamp(315px,45vh,430px);margin-top:26px;}
+ .hero-finmax .phone{width:clamp(175px,46vw,216px);top:13%;}
+ .hero-finmax .f-doc,.hero-finmax .f-id{width:134px;min-height:auto;padding:10px;border-radius:12px;}
+ .hero-finmax .f-doc{left:-5%;top:5%;}
+ .hero-finmax .f-id{right:-5%;top:11%;}
+ .hero-finmax .floating-eyebrow{font-size:.56rem;}
+ .hero-finmax .fl-live{width:6px;height:6px;}
+ .hero-finmax .fl-label{font-size:.54rem;margin-top:9px;}
+ .hero-finmax .fl-value{font-size:.68rem;}
+ .hero-finmax .fl-value svg{width:12px;height:12px;}
+ .hero-finmax .fl-sep{margin-top:6px;}
+ .hero-finmax .fl-footer{font-size:.49rem;margin-top:6px;}
+ .hero-finmax .f-acc{left:-8%;top:65%;width:147px;padding:8px;gap:6px;}
+ .hero-finmax .f-pay{right:-8%;top:67%;width:154px;padding:8px;gap:6px;}
+ .hero-finmax .acc-icon{width:23px;height:23px;}
+ .hero-finmax .acc-text b,.hero-finmax .pay-copy b{font-size:.59rem;}
+ .hero-finmax .acc-text small,.hero-finmax .pay-copy span{font-size:.47rem;}
+ .hero-finmax .acc-ok{width:15px;height:15px;font-size:.58rem;}
+ .hero-finmax .pay-avatars span{width:18px;height:18px;font-size:.5rem;}
+ .hero-finmax .f-check{width:22px;height:22px;font-size:.68rem;}
+ .hero-finmax .f-check-l{left:0%;top:2%;}.hero-finmax .f-check-r{right:0%;top:51%;}
+ .hero-finmax .phone-top-text small{font-size:.51rem;}
+ .hero-finmax .phone-top-text h3{font-size:.75rem;}
+ .hero-finmax .hero-scroll-tip{font-size:.58rem;margin-top:0;}
+}
+@media(max-width:980px){.hero-finmax .f-doc,.hero-finmax .f-id{display:block;}}
+@media(max-width:640px){.hero-finmax .f-pay{display:flex;}}
+@media(prefers-reduced-motion:reduce){
+ .hero.hero-finmax{height:auto;min-height:0;}
+ .hero-finmax .hero-pin{position:relative;top:auto;height:auto;min-height:0;padding-bottom:90px;}
+ .hero-finmax .head,.hero-finmax .phone,.hero-finmax .f,.hero-finmax .stage{transform:none!important;opacity:1!important;}
+ .hero-finmax .phone{transform:translateX(-50%)!important;}
+ .hero-finmax .hero-scroll-tip{display:none;}
+ .hero-finmax .hero-glow{opacity:1!important;}
+}
+
+
+/* ============================================
+   SİMA v9 — reference-led finishing layer
+   Natural hero scrolling + liquid-glass cards
+   Wide black footer with 3D rotating wordmark
+   ============================================ */
+.hero.hero-finmax{height:auto!important;min-height:0!important;position:relative;overflow:hidden;background:#fff;padding:0!important;}
+.hero-finmax .hero-pin{position:relative!important;top:auto!important;height:auto!important;min-height:0!important;overflow:hidden;padding:0!important;background:transparent;}
+.hero-finmax .hero-content{padding-top:clamp(42px,5.6vw,76px);}
+.hero-finmax .stage{height:clamp(475px,39vw,548px);margin-top:clamp(25px,3vw,39px);}
+.hero-finmax .hero-scroll-tip{display:none;}
+.hero-finmax .hero-glow{bottom:-28%;height:90%;width:120%;background:
+  radial-gradient(ellipse 64% 56% at 50% 93%,rgba(24,215,103,.50) 0%,rgba(79,229,128,.35) 33%,rgba(160,242,188,.20) 59%,transparent 100%);
+  transform:translate3d(-50%,0,0)!important;opacity:1!important;}
+.hero-finmax .hero-grid{opacity:.11;}
+.hero-finmax .head {opacity:1!important;transform:none!important;}
+/* Glass must remain light, translucent and legible over white AND green. */
+.hero-finmax .f{
+  color:#102D23;
+  background:linear-gradient(145deg,rgba(255,255,255,.79) 0%,rgba(251,255,253,.54) 48%,rgba(231,253,240,.44) 100%);
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 18px 55px -27px rgba(4,71,35,.32),0 6px 20px rgba(32,97,62,.075),inset 0 1px 1px rgba(255,255,255,.97),inset 0 -1px 1px rgba(255,255,255,.25);
+  backdrop-filter:blur(22px) saturate(175%);-webkit-backdrop-filter:blur(22px) saturate(175%);
+  border-radius:20px;opacity:var(--panel-opacity,1);
+}
+.hero-finmax .f::before{content:"";position:absolute;inset:1px;pointer-events:none;border-radius:inherit;background:linear-gradient(128deg,rgba(255,255,255,.45),transparent 43%,rgba(255,255,255,.14));}
+.hero-finmax .f > *{position:relative;z-index:1;}
+.hero-finmax .floating-eyebrow{color:#28634B;}
+.hero-finmax .fl-live{background:#19BD67;box-shadow:0 0 0 3px rgba(23,178,91,.14);}
+.hero-finmax .fl-plus,.hero-finmax .fl-value svg{color:#00B04E;}
+.hero-finmax .fl-label,.hero-finmax .fl-footer{color:#618375;}
+.hero-finmax .fl-value{color:#123E2A;}
+.hero-finmax .fl-sep{background:rgba(28,101,61,.10);}
+.hero-finmax .fl-footer span{color:#008845;}
+.hero-finmax .acc-icon{color:#078948;background:rgba(46,207,111,.12);}
+.hero-finmax .acc-text b,.hero-finmax .pay-copy b{color:#163B2B;}
+.hero-finmax .acc-text small,.hero-finmax .pay-copy span{color:#60806C;}
+.hero-finmax .acc-ok{background:#24C26A;color:#fff;}
+.hero-finmax .pay-avatars span{border-color:rgba(255,255,255,.93);}
+.hero-finmax .pay-arrow{color:#0D9B54;}
+.hero-finmax .f-check{background:linear-gradient(145deg,rgba(255,255,255,.84),rgba(202,255,221,.67));border:1px solid #fff;color:#099D54;box-shadow:0 8px 22px rgba(13,142,73,.13);}
+.hero-finmax .phone{z-index:9;}
+/* Glow transitions directly into the statistics section: no long white scene. */
+.hero-finmax + .sw{position:relative;z-index:2;}
+@media (max-width:980px){
+ .hero-finmax .hero-content{padding-top:46px;}
+ .hero-finmax .stage{height:clamp(455px,56vw,530px);}
+ .hero-finmax .hero-glow{width:175%;bottom:-33%;}
+}
+@media (max-width:640px){
+ .hero-finmax .hero-content{padding-top:26px;}
+ .hero-finmax .stage{height:clamp(360px,99vw,455px);margin-top:18px;}
+ .hero-finmax .phone{top:10%;}
+ .hero-finmax .hero-glow{width:250%;bottom:-23%;}
+ .hero-finmax .f{border-radius:14px;backdrop-filter:blur(14px) saturate(145%);-webkit-backdrop-filter:blur(14px) saturate(145%);}
+ .hero-finmax .f-doc{left:-3%;top:7%;}.hero-finmax .f-id{right:-4%;top:8%;}
+ .hero-finmax .f-acc{left:-3%;top:70%;}.hero-finmax .f-pay{right:-4%;top:70%;}
+}
+/* Footer: build visual hierarchy from the reference video, not original 4-column footer. */
+.ft.ft-finmax{background:#090A0B!important;color:#FCFCFD;overflow:hidden;position:relative;isolation:isolate;padding:0;}
+.ft-finmax::before{content:"";position:absolute;inset:0;opacity:.32;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.055),transparent 25%,rgba(255,255,255,.02) 100%);}
+.ft-finmax .ft-headline{position:relative;display:grid;grid-template-columns:minmax(230px,2.2fr) repeat(3,minmax(125px,1fr));gap:28px;padding:78px 0 56px;align-items:start;}
+.ft-finmax .ft-sign{width:132px;display:block;}
+.ft-finmax .ft-sign .logo{height:auto;width:100%;}
+.ft-finmax .ft-sign .logo path[fill="#1D204F"]{fill:#fff;}
+.ft-finmax .ft-links{display:flex;flex-direction:column;gap:12px;align-items:start;}
+.ft-finmax .ft-links h3{font:600 .88rem var(--b);margin-bottom:8px;color:#fff;}
+.ft-finmax .ft-links a,.ft-finmax .ft-links span{font:400 .84rem/1.5 var(--b);color:#B2B8B5;transition:color .2s;}
+.ft-finmax .ft-links a:hover{color:#fff;}
+.ft-finmax .ft-line{height:1px;background:rgba(255,255,255,.11);}
+.ft-finmax .ft-meta{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:22px 0;color:#A8A9AD;font-size:.76rem;}
+.ft-finmax .ft-meta>div{display:flex;gap:24px;}
+.ft-finmax .ft-meta a:hover{color:#fff;}
+.ft-finmax .ft-wordmark-stage{height:clamp(185px,24vw,330px);position:relative;perspective:1450px;overflow:hidden;margin-top:0;}
+.ft-finmax .ft-wordmark-perspective{position:absolute;left:50%;top:3%;width:min(95%,1170px);aspect-ratio:552/176;transform:translateX(-50%);transform-style:preserve-3d;will-change:transform;}
+.ft-finmax .ft-wordmark-face,.ft-finmax .ft-wordmark-reflection{position:absolute;inset:0;color:#404244;backface-visibility:visible;transform-origin:50% 50%;}
+.ft-finmax .ft-wordmark-face{animation:ft-roll 7.6s cubic-bezier(.45,.02,.45,.98) infinite;filter:drop-shadow(0 -1px 1px rgba(255,255,255,.03));}
+.ft-finmax .ft-giga-svg{display:block;width:100%;height:100%;}
+.ft-finmax .ft-wordmark-reflection{top:66%;transform:scaleY(-.5);opacity:.22;filter:blur(1px);mask-image:linear-gradient(to bottom,rgba(0,0,0,.37),transparent 72%);pointer-events:none;}
+.ft-finmax .ft-wordmark-reflection .ft-giga-svg{fill:#404244;}
+@keyframes ft-roll{
+  0%,13%{transform:perspective(1300px) rotateX(0deg) translateY(0);opacity:1;color:#414345;}
+  24%{transform:perspective(1300px) rotateX(67deg) translateY(16px);opacity:.8;color:#333638;}
+  37%{transform:perspective(1300px) rotateX(-19deg) translateY(6px);opacity:1;color:#4D5052;}
+  51%{transform:perspective(1300px) rotateX(0deg);opacity:1;color:#414345;}
+  65%{transform:perspective(1300px) rotateX(-62deg) translateY(19px);opacity:.9;color:#373A3D;}
+  78%{transform:perspective(1300px) rotateX(16deg) translateY(3px);opacity:1;color:#515355;}
+  91%,100%{transform:perspective(1300px) rotateX(0deg) translateY(0);opacity:1;color:#414345;}
+}
+.ft-finmax .ft-socials{position:relative;display:flex;gap:9px;padding:0 0 36px;align-items:center;}
+.ft-finmax .ft-socials a{width:30px;height:30px;border-radius:50%;background:#F7F8F7;color:#111;font:700 .85rem var(--b);display:grid;place-items:center;transition:transform .2s,background .2s;}
+.ft-finmax .ft-socials a:hover{transform:translateY(-3px);background:#B9FFD0;}
+@media(max-width:980px){
+ .ft-finmax .ft-headline{grid-template-columns:1.2fr 1fr 1fr;gap:32px;padding:55px 0 36px;}
+ .ft-finmax .ft-sign{grid-column:1/-1;}
+ .ft-finmax .ft-wordmark-stage{height:clamp(160px,29vw,300px);}
+}
+@media(max-width:640px){
+ .ft-finmax .ft-headline{grid-template-columns:1fr 1fr;gap:30px 16px;padding:44px 0 32px;}
+ .ft-finmax .ft-sign{grid-column:1/-1;}
+ .ft-finmax .ft-links h3{font-size:.83rem;}
+ .ft-finmax .ft-links a,.ft-finmax .ft-links span{font-size:.78rem;}
+ .ft-finmax .ft-meta{align-items:flex-start;flex-direction:column;}
+ .ft-finmax .ft-meta>div{gap:18px;flex-wrap:wrap;}
+ .ft-finmax .ft-wordmark-stage{height:clamp(100px,31vw,160px);}
+ .ft-finmax .ft-wordmark-perspective{width:99%;top:13%;}
+ .ft-finmax .ft-socials{padding-bottom:30px;}
+}
+@media(max-width:620px){
+ .tgrid{grid-template-columns:minmax(0,1fr)!important;}
+ .tgrid .tc{min-width:0;}
+}
+@media(prefers-reduced-motion:reduce){
+ .ft-finmax .ft-wordmark-face{animation:none!important;}
+ .hero-finmax .head,.hero-finmax .phone,.hero-finmax .f{opacity:1!important;}
+}
+
+
+/* ============================================================
+   SİMA v10 — brand refinements (non-invasive override layer)
+   Hero glow restored, compact service finder, softer glass,
+   navy dark surfaces and recurring aurora highlights.
+   ============================================================ */
+:root{
+  --void:#10132D;
+  --deep:#171A3D;
+  --deep2:#1D204F;
+  --navy-deep:#0C1027;
+  --navy-mid:#151A3B;
+  --sima-glow:rgba(0,176,78,.42);
+}
+/* Reinstate the green glow within the *visible* hero stage, rather than
+   leaving the gradient centred below the cropped bottom edge. */
+.hero-finmax .hero-glow{
+  top:43%;bottom:auto!important;left:50%;width:128%;height:74%;
+  border-radius:50%;opacity:1!important;
+  background:
+    radial-gradient(ellipse 43% 50% at 50% 59%,rgba(18,192,91,.44) 0%,rgba(47,207,110,.31) 30%,rgba(125,235,165,.18) 61%,transparent 100%),
+    radial-gradient(ellipse 65% 51% at 50% 88%,rgba(32,204,96,.25),rgba(150,239,181,.11) 58%,transparent 100%);
+  filter:blur(26px);
+  transform:translate3d(-50%,0,0)!important;
+  pointer-events:none;
+}
+.hero-finmax .hero-pin{background:linear-gradient(180deg,#fff 0%,#fff 44%,#F9FEFB 80%,#E5F8EB 100%)!important;}
+/* More natural, less milky liquid-glass panels. */
+.hero-finmax .f{
+  background:linear-gradient(143deg,rgba(255,255,255,.68) 0%,rgba(247,255,250,.42) 51%,rgba(228,253,239,.34) 100%);
+  border-color:rgba(255,255,255,.79);
+  box-shadow:0 22px 45px -28px rgba(8,74,42,.30),0 6px 19px rgba(22,91,57,.07),inset 0 1px 0 rgba(255,255,255,.84);
+  backdrop-filter:blur(19px) saturate(133%);
+  -webkit-backdrop-filter:blur(19px) saturate(133%);
+}
+.hero-finmax .f::before{background:linear-gradient(125deg,rgba(255,255,255,.22),transparent 49%,rgba(255,255,255,.05));}
+/* Finder: wider usable right column, all 6 categories in a single desktop row,
+   less dead space, and the *same* functional search/filter behaviour. */
+#xidmetler{position:relative;overflow:hidden;background:
+  radial-gradient(ellipse 50% 67% at 95% 92%,rgba(0,176,78,.12),transparent 70%),
+  linear-gradient(145deg,var(--navy-deep),var(--void) 62%,var(--navy-mid));}
+#xidmetler .w{position:relative;z-index:1;}
+#xidmetler .fd{grid-template-columns:minmax(0,.94fr) minmax(0,1.12fr);gap:clamp(32px,4.4vw,64px);}
+#xidmetler .fglass{
+  height:368px;padding:18px 19px 16px;border-radius:24px;
+  background:rgba(255,255,255,.043);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.075),0 28px 62px -47px rgba(0,0,0,.7);
+  backdrop-filter:blur(16px) saturate(112%);
+  -webkit-backdrop-filter:blur(16px) saturate(112%);
+}
+#xidmetler .fglass::before{border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.032),transparent 56%);}
+#xidmetler .sbox{height:42px;background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.13);}
+#xidmetler .cats{display:flex;flex-wrap:nowrap;gap:6px;margin:13px 0 14px;}
+#xidmetler .cat{flex:0 0 auto;white-space:nowrap;padding:7px 10px;font-size:.75rem;line-height:1.28;border-color:rgba(255,255,255,.15);}
+#xidmetler .cat[aria-pressed=true]{background:rgba(255,255,255,.95);color:var(--void);}
+#xidmetler .svcs{grid-auto-rows:57px;gap:8px;min-height:0;}
+#xidmetler .svc{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.08);border-radius:11px;padding:0 9px;gap:8px;}
+#xidmetler .svc:hover{background:rgba(255,255,255,.105);}
+#xidmetler .svc em{width:28px;height:28px;font-size:.62rem;}
+#xidmetler .svc b{font-size:.76rem;}
+#xidmetler .svc span{font-size:.68rem;}
+#xidmetler .fd-f{margin-top:11px;font-size:.77rem;}
+/* The verification-panel glass is transparent enough to reveal the aurora. */
+#yoxla .glass{
+  background:rgba(255,255,255,.095);border-color:rgba(255,255,255,.2);
+  backdrop-filter:blur(16px) saturate(120%);
+  -webkit-backdrop-filter:blur(16px) saturate(120%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 22px 51px -36px rgba(0,0,0,.45);
+}
+#yoxla .glass::before{background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 53%);}
+#yoxla .glass-i{background:rgba(255,255,255,.10);}
+/* Reuse the same soft, blurred green glow elsewhere, but only as restrained accents. */
+#hellər,#auditoriya{position:relative;isolation:isolate;overflow:hidden;}
+#hellər::before,#auditoriya::before{content:"";position:absolute;pointer-events:none;z-index:0;border-radius:50%;filter:blur(52px);}
+#hellər::before{width:min(67vw,840px);height:560px;top:3%;right:-16%;
+  background:radial-gradient(ellipse at center,rgba(23,204,100,.13),rgba(96,227,151,.055) 50%,transparent 75%);}
+#auditoriya::before{width:min(67vw,850px);height:570px;bottom:-38%;left:-20%;
+  background:radial-gradient(ellipse at center,rgba(24,200,102,.13),rgba(122,225,167,.06) 52%,transparent 75%);}
+#hellər>.w,#auditoriya>.w{position:relative;z-index:1;}
+/* Dark areas share one coherent deepened SİMA navy family. */
+.sw{background:linear-gradient(135deg,#0B0F28 0%,#151939 53%,#1B254A 100%);}
+.sw::after{background:radial-gradient(circle,rgba(20,26,65,.83),transparent 64%);}
+.pf-panel,.pf-tab[aria-selected=true]{background:var(--void);}
+.pf-tab[aria-selected=true]::after{background:var(--void);}
+.aud-biz{background:linear-gradient(145deg,#111532,#1C2148);}
+.arrowbtn{background:var(--deep);}
+/* Brand-navy footer keeps the v9 oversized 3D wordmark animation intact. */
+.ft.ft-finmax{background:linear-gradient(160deg,#0B0E25 0%,#121630 51%,#0D112B 100%)!important;}
+.ft-finmax::before{opacity:.54;background:
+  radial-gradient(ellipse 70% 30% at 49% 102%,rgba(10,151,74,.11),transparent 76%),
+  linear-gradient(180deg,rgba(255,255,255,.033),transparent 33%);}
+.ft-finmax .ft-links a,.ft-finmax .ft-links span{color:#ADB3CE;}
+.ft-finmax .ft-meta{color:#A0A7C4;}
+.ft-finmax .ft-wordmark-face,.ft-finmax .ft-wordmark-reflection{color:#515985;}
+.ft-finmax .ft-wordmark-reflection .ft-giga-svg{fill:#515985;}
+@keyframes ft-roll{
+  0%,13%{transform:perspective(1300px) rotateX(0deg) translateY(0);opacity:1;color:#515985;}
+  24%{transform:perspective(1300px) rotateX(67deg) translateY(16px);opacity:.8;color:#414871;}
+  37%{transform:perspective(1300px) rotateX(-19deg) translateY(6px);opacity:1;color:#616B9D;}
+  51%{transform:perspective(1300px) rotateX(0deg);opacity:1;color:#515985;}
+  65%{transform:perspective(1300px) rotateX(-62deg) translateY(19px);opacity:.9;color:#414871;}
+  78%{transform:perspective(1300px) rotateX(16deg) translateY(3px);opacity:1;color:#6672A0;}
+  91%,100%{transform:perspective(1300px) rotateX(0deg) translateY(0);opacity:1;color:#515985;}
+}
+@media(max-width:1100px){
+ #xidmetler .fd{grid-template-columns:1fr;gap:26px;}
+ #xidmetler .cats{flex-wrap:wrap;}
+ #xidmetler .fglass{max-width:750px;width:100%;height:auto;min-height:335px;}
+ #xidmetler .svcs{grid-auto-rows:59px;}
+}
+@media(max-width:640px){
+ .hero-finmax .hero-glow{top:40%;width:220%;height:84%;filter:blur(26px);}
+ #xidmetler .fglass{padding:17px 15px;min-height:0;}
+ #xidmetler .cats{gap:7px;margin:13px 0 15px;}
+ #xidmetler .cat{font-size:.75rem;padding:7px 10px;}
+ #xidmetler .svcs{grid-template-columns:1fr;grid-auto-rows:53px;gap:7px;}
+ #xidmetler .fd-f{font-size:.72rem;}
+}
+@media(prefers-reduced-motion:reduce){
+ .hero-finmax .hero-glow{filter:blur(26px);}
+}
+
+
+/* ============================================================
+   SİMA v10 final — compact finder with an aurora glow.
+   Keep V10's existing motion, sticky-free hero and footer unchanged.
+   ============================================================ */
+#xidmetler{
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse 70% 88% at 82% 115%,rgba(0,176,78,.30) 0%,rgba(0,176,78,.13) 34%,transparent 77%),
+    radial-gradient(ellipse 60% 80% at 4% 90%,rgba(17,132,92,.105),transparent 71%),
+    linear-gradient(145deg,var(--navy-deep) 0%,var(--void) 62%,var(--navy-mid) 100%);
+}
+#xidmetler::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  pointer-events:none;
+  left:29%;right:-15%;bottom:-46%;height:113%;
+  background:radial-gradient(ellipse at center,rgba(38,219,124,.27) 0%,rgba(0,176,78,.13) 42%,transparent 76%);
+  filter:blur(49px);
+}
+#xidmetler .w{z-index:1;}
+#xidmetler .fglass{
+  border:1px solid rgba(255,255,255,.17);
+  background:rgba(255,255,255,.044);
+  box-shadow:0 26px 65px -51px rgba(0,0,0,.66),inset 0 1px 0 rgba(255,255,255,.075);
+}
+#xidmetler .fglass::before{
+  background:linear-gradient(135deg,rgba(255,255,255,.026),transparent 60%);
+}
+/* Only the main glass container and chips have outlines.
+   Search and individual service tiles use separation by fill/spacing. */
+#xidmetler .sbox{
+  border:0;
+  background:rgba(255,255,255,.075);
+  box-shadow:none;
+}
+#xidmetler .svc{
+  border:0;
+  background:rgba(255,255,255,.065);
+  box-shadow:none;
+}
+#xidmetler .svc:hover{
+  background:rgba(255,255,255,.135);
+}
+#xidmetler .cat{
+  border:1px solid rgba(255,255,255,.20);
+  background:rgba(255,255,255,.022);
+}
+#xidmetler .cat:hover{border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.09);}
+#xidmetler .cat[aria-pressed=true]{border-color:rgba(255,255,255,.95);}
+@media (prefers-reduced-motion:reduce){#xidmetler::before{filter:blur(49px)}}
+
+
+/* SİMA v10 final polish: left-aligned finder glow, branded verify navy. */
+#xidmetler{
+  background:
+    radial-gradient(ellipse 59% 82% at 13% 112%,rgba(0,176,78,.22) 0%,rgba(0,176,78,.10) 38%,transparent 78%),
+    radial-gradient(ellipse 40% 62% at 24% 83%,rgba(36,214,119,.10),transparent 75%),
+    linear-gradient(145deg,var(--navy-deep) 0%,var(--void) 62%,var(--navy-mid) 100%);
+}
+#xidmetler::before{
+  left:-23%;right:auto;width:77%;height:114%;bottom:-43%;
+  background:radial-gradient(ellipse 57% 56% at 50% 57%,rgba(38,219,124,.30) 0%,rgba(0,176,78,.13) 45%,transparent 80%);
+  filter:blur(52px);
+}
+
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="w nav">
+    <a href="#" aria-label="SİMA"><svg class="logo" width="119" height="56" viewBox="0 0 119 56" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M41.6667 4.76093H32.9242V9.89801H41.6667V4.76093Z" fill="#1D204F"/><path d="M8.73097 27.3168C10.895 29.3942 14.1409 31.0385 18.0358 31.0385C19.6802 31.0385 21.2391 30.4762 21.2391 29.3503C21.2391 28.2256 20.0278 27.662 17.171 27.1424C12.41 26.2763 5.13858 25.1516 5.13858 17.9241C5.13858 13.0338 9.20672 8.57539 17.1271 8.57539C21.8441 8.57539 26.0867 9.9172 29.3754 12.6008L24.701 18.7902C22.1906 16.8861 18.9446 15.9334 16.6501 15.9334C14.4862 15.9334 14.0104 16.7128 14.0104 17.4484C14.0104 18.5743 15.179 18.9634 18.2518 19.4831C23.0127 20.3052 30.067 21.6909 30.067 28.3561C30.067 34.7187 25.3487 38.3977 17.6028 38.3977C11.4573 38.3977 7.25866 36.5801 4.18591 33.8099L8.73097 27.3168Z" fill="#1D204F"/><path d="M32.9242 37.8772V12.1219H41.6667V37.8772H32.9242Z" fill="#1D204F"/><path d="M46.3418 33.152V37.8797H51.0719L46.3418 33.152Z" fill="#1D204F"/><path d="M69.9366 37.8783H78.6792V23.5598L69.9366 32.3023V37.8783Z" fill="#1D204F"/><path d="M104.984 37.8786L103.858 34.1569H92.7786L91.6539 37.8786H82.1758L92.8224 9.01015H103.816L114.462 37.8786H104.984ZM98.319 16.7146L95.0303 26.8855H101.609L98.319 16.7146Z" fill="#1D204F"/><path d="M78.6792 4.7728V16.9748L69.9367 25.7197L57.7762 37.879L51.6639 31.7667L51.6663 31.7632L46.3418 26.4387V14.2212L46.3454 14.2177L57.7786 25.6509L78.6686 4.76093L78.6792 4.7728Z" fill="#00B04E"/><path d="M5.64052 47.7471V49.6702H4.17651V43.9945H7.01792C7.42604 43.9945 7.78314 44.0799 8.08211 44.2413C8.3882 44.4026 8.61836 44.6328 8.7631 44.914C8.91614 45.2035 8.99326 45.5262 8.99326 45.8844C8.99326 46.3353 8.88292 46.7007 8.66107 46.9902C8.44871 47.2713 8.18414 47.4754 7.86975 47.5857L9.02648 49.6702H7.35011L6.39744 47.7471H5.64052ZM7.29909 45.4241C7.16266 45.3043 6.993 45.245 6.79725 45.245H5.64052V46.5215H6.79725C6.993 46.5215 7.16266 46.4622 7.29909 46.3424C7.43553 46.2238 7.50315 46.0695 7.50315 45.875C7.50315 45.6792 7.43553 45.5262 7.29909 45.4075V45.4241Z" fill="#1D204F"/><path d="M13.4339 48.7261C13.2464 49.05 12.9914 49.305 12.6592 49.5008C12.327 49.6965 11.9533 49.7903 11.5357 49.7903C11.1359 49.7903 10.7787 49.6965 10.4549 49.5091C10.131 49.3216 9.88539 49.0583 9.70625 48.7095C9.5271 48.3607 9.44287 47.9609 9.44287 47.5017V47.2206H12.3697C12.327 47.0248 12.2167 46.8468 12.0375 46.7021C11.8584 46.5574 11.6294 46.4897 11.3482 46.4897C11.1869 46.4897 11.0077 46.5241 10.8037 46.5918C10.6079 46.6594 10.4466 46.7448 10.3362 46.8468L9.78337 46.0211C9.97912 45.842 10.2342 45.715 10.5403 45.6213C10.8547 45.5276 11.1786 45.4766 11.5013 45.4766C11.9355 45.4766 12.3175 45.562 12.6497 45.7399C12.9985 45.9191 13.2619 46.1742 13.4576 46.4885C13.6534 46.8207 13.7554 47.1944 13.7554 47.6287C13.7554 48.0285 13.6617 48.3856 13.4742 48.7095L13.4339 48.7261ZM12.1158 48.5813C12.2522 48.4366 12.3365 48.2669 12.3709 48.0878H10.6779C10.704 48.2669 10.7882 48.4283 10.9164 48.573C11.0528 48.7178 11.2569 48.7854 11.5285 48.7854C11.7836 48.7854 11.9794 48.7178 12.1158 48.573V48.5813Z" fill="#1D204F"/><path d="M17.1951 49.1934C16.8712 49.5849 16.4631 49.7806 15.9778 49.7806C15.629 49.7806 15.3146 49.6952 15.0418 49.5255C14.7701 49.3559 14.5565 49.1091 14.4035 48.7852C14.2505 48.4614 14.1733 48.071 14.1733 47.619C14.1733 47.1682 14.2505 46.7767 14.4035 46.4528C14.5565 46.1289 14.7689 45.8833 15.0418 45.7125C15.3135 45.5428 15.629 45.4574 15.9778 45.4574C16.4714 45.4574 16.8795 45.6532 17.1951 46.0364V45.5594H18.4965V51.2351H17.1951V49.1934ZM17.1951 47.0068C17.118 46.8882 16.9993 46.7945 16.8546 46.7352C16.7015 46.6675 16.5568 46.6331 16.4121 46.6331C16.1487 46.6331 15.9351 46.7268 15.7655 46.9048C15.5958 47.084 15.5104 47.3212 15.5104 47.619C15.5104 47.9334 15.5958 48.1719 15.7655 48.351C15.9351 48.5302 16.1487 48.6239 16.4121 48.6239C16.5485 48.6239 16.6932 48.5895 16.8463 48.5219C16.9993 48.4542 17.118 48.3605 17.1951 48.249V46.9985V47.0068Z" fill="#1D204F"/><path d="M23.1191 48.7261C22.9316 49.05 22.6765 49.305 22.3444 49.5008C22.0122 49.6965 21.6385 49.7903 21.2208 49.7903C20.821 49.7903 20.4639 49.6965 20.14 49.5091C19.8162 49.3216 19.5706 49.0583 19.3914 48.7095C19.2123 48.3607 19.1281 47.9609 19.1281 47.5017V47.2206H22.0549C22.0122 47.0248 21.9018 46.8468 21.7227 46.7021C21.5435 46.5574 21.3146 46.4897 21.0334 46.4897C20.872 46.4897 20.6929 46.5241 20.4888 46.5918C20.2931 46.6594 20.1317 46.7448 20.0214 46.8468L19.4685 46.0211C19.6643 45.842 19.9194 45.715 20.2255 45.6213C20.5399 45.5276 20.8637 45.4766 21.1864 45.4766C21.6207 45.4766 22.0027 45.562 22.3349 45.7399C22.6837 45.9191 22.947 46.1742 23.1428 46.4885C23.3386 46.8207 23.4406 47.1944 23.4406 47.6287C23.4406 48.0285 23.3469 48.3856 23.1594 48.7095L23.1191 48.7261ZM21.7998 48.5813C21.9362 48.4366 22.0205 48.2669 22.0549 48.0878H20.3619C20.388 48.2669 20.4722 48.4283 20.6004 48.573C20.7368 48.7178 20.9409 48.7854 21.2125 48.7854C21.4676 48.7854 21.6634 48.7178 21.7998 48.573V48.5813Z" fill="#1D204F"/><path d="M29.2963 47.1945C29.2963 47.0249 29.2536 46.8885 29.1682 46.7864C29.0828 46.6844 28.9475 46.6334 28.7601 46.6334C28.5987 46.6334 28.454 46.6761 28.3258 46.752C28.1977 46.8291 28.0957 46.9217 28.0198 47.0332V49.6883H26.71V47.1862C26.71 47.0166 26.6673 46.8802 26.5819 46.7781C26.4964 46.6761 26.3612 46.6251 26.1737 46.6251C25.9021 46.6251 25.6553 46.7615 25.4417 47.0249V49.68H24.132V45.5704H25.4417V46.0722C25.5521 45.9275 25.7312 45.7911 25.978 45.6641C26.2248 45.536 26.4964 45.4684 26.7942 45.4684C27.092 45.4684 27.3388 45.5277 27.5345 45.6558C27.7303 45.7839 27.875 45.9702 27.9604 46.2004C28.0886 46.0046 28.2748 45.8349 28.5394 45.6902C28.8028 45.5455 29.0756 45.4695 29.3734 45.4695C29.7649 45.4695 30.071 45.5716 30.2834 45.7756C30.4958 45.9797 30.6073 46.2858 30.6073 46.6951V49.6729H29.3058V47.1708L29.2963 47.1945Z" fill="#1D204F"/><path d="M31.7649 48.2339C31.9263 48.3787 32.1564 48.5068 32.4376 48.6171C32.7188 48.7275 32.9821 48.7785 33.2206 48.7785C33.3998 48.7785 33.5445 48.7536 33.637 48.7014C33.7308 48.6504 33.7735 48.5732 33.7735 48.4807C33.7735 48.3882 33.7141 48.311 33.5943 48.26C33.484 48.2173 33.3048 48.1663 33.0581 48.1236C32.7093 48.0643 32.4364 47.9955 32.2074 47.9278C31.9951 47.8602 31.7993 47.7321 31.6202 47.5541C31.4505 47.375 31.3651 47.1282 31.3651 46.8055C31.3651 46.5587 31.4327 46.3286 31.5692 46.1245C31.7056 45.9205 31.9096 45.7591 32.173 45.6393C32.4364 45.5207 32.752 45.4602 33.1174 45.4602C33.4413 45.4602 33.7557 45.5112 34.0535 45.6049C34.3429 45.6986 34.6063 45.8256 34.8365 46.0047L34.3346 46.8731C34.2065 46.745 34.0285 46.6347 33.8067 46.5493C33.5848 46.4638 33.3559 46.4211 33.1257 46.4211C32.9643 46.4211 32.8362 46.4472 32.7425 46.4982C32.6488 46.5493 32.6061 46.6169 32.6061 46.7023C32.6061 46.796 32.6571 46.8637 32.7591 46.9064C32.8611 46.9491 33.0308 46.9918 33.2693 47.0345C33.618 47.0938 33.8992 47.1614 34.1282 47.2386C34.3584 47.3157 34.5624 47.4509 34.7404 47.6301C34.9195 47.8092 35.0038 48.0726 35.0038 48.4131C35.0038 48.6765 34.9266 48.9066 34.7736 49.1107C34.6205 49.3147 34.4082 49.4761 34.127 49.5959C33.8458 49.7145 33.5148 49.7751 33.1316 49.7751C32.7745 49.7751 32.4174 49.7157 32.0591 49.6054C31.7103 49.4951 31.4292 49.342 31.2168 49.1463L31.7613 48.2446V48.2339H31.7649Z" fill="#1D204F"/><path d="M38.1134 49.2459C37.9853 49.3907 37.8073 49.5188 37.5772 49.6113C37.3565 49.7051 37.1097 49.7478 36.8369 49.7478C36.6162 49.7478 36.3943 49.6968 36.1737 49.5947C35.9613 49.4927 35.7739 49.3396 35.6291 49.1356C35.4844 48.9398 35.4167 48.6931 35.4167 48.3953C35.4167 47.9445 35.5615 47.6123 35.8427 47.4082C36.1238 47.2041 36.4465 47.1021 36.8297 47.1021C37.1109 47.1021 37.366 47.1448 37.595 47.2302C37.8251 47.3157 37.9948 47.4343 38.1134 47.5873V47.0689C38.1134 46.8898 38.0363 46.745 37.8927 46.6347C37.748 46.5243 37.5439 46.4733 37.2806 46.4733C37.0682 46.4733 36.8641 46.5077 36.6684 46.5837C36.456 46.6608 36.2769 46.7711 36.1155 46.9159L35.6481 46.0901C35.8949 45.8778 36.1843 45.7152 36.5165 45.6132C36.8487 45.5112 37.1797 45.4602 37.5119 45.4602C38.0731 45.4602 38.5334 45.5883 38.8905 45.8434C39.2476 46.0984 39.4267 46.516 39.4267 47.1021V49.6718H38.117V49.2637V49.2459H38.1134ZM38.1134 48.2173C38.0458 48.1236 37.9438 48.056 37.8073 48.005C37.6709 47.9539 37.5261 47.9278 37.3731 47.9278C37.1857 47.9278 37.0326 47.9706 36.9057 48.056C36.7787 48.1414 36.7182 48.26 36.7182 48.4131C36.7182 48.5661 36.7775 48.6859 36.9057 48.7702C37.0338 48.8544 37.1868 48.8971 37.3731 48.8971C37.5261 48.8971 37.6709 48.8722 37.8073 48.82C37.9355 48.769 38.0375 48.6931 38.1134 48.5993V48.2339V48.2173Z" fill="#1D204F"/><path d="M41.6867 43.9945V49.6702H40.377V43.9945H41.6867Z" fill="#1D204F"/><path d="M46.3143 47.39V49.6702H44.8503V43.9945H46.3143V46.1134H48.6717V43.9945H50.1345V49.6702H48.6717V47.39H46.3143Z" fill="#1D204F"/><path d="M54.7831 48.7261C54.5957 49.05 54.3406 49.305 54.0084 49.5008C53.6762 49.6965 53.3025 49.7903 52.8849 49.7903C52.4851 49.7903 52.128 49.6965 51.8041 49.5091C51.4802 49.3216 51.2346 49.0583 51.0555 48.7095C50.8763 48.3607 50.7921 47.9609 50.7921 47.5017V47.2206H53.7189C53.6762 47.0248 53.5659 46.8468 53.3867 46.7021C53.2076 46.5574 52.9786 46.4897 52.6975 46.4897C52.5361 46.4897 52.357 46.5241 52.1529 46.5918C51.9571 46.6594 51.7958 46.7448 51.6855 46.8468L51.1326 46.0211C51.3284 45.842 51.5834 45.715 51.8895 45.6213C52.2039 45.5276 52.5278 45.4766 52.8505 45.4766C53.2847 45.4766 53.6667 45.562 53.9989 45.7399C54.3477 45.9191 54.6111 46.1742 54.8069 46.4885C55.0026 46.8207 55.1046 47.1944 55.1046 47.6287C55.1046 48.0285 55.0109 48.3856 54.8235 48.7095L54.7831 48.7261ZM53.4639 48.5813C53.6003 48.4366 53.6845 48.2669 53.7189 48.0878H52.026C52.0521 48.2669 52.1363 48.4283 52.2644 48.573C52.4009 48.7178 52.6049 48.7854 52.8766 48.7854C53.1317 48.7854 53.3274 48.7178 53.4639 48.573V48.5813Z" fill="#1D204F"/><path d="M57.0976 43.9945V49.6702H55.7878V43.9945H57.0976Z" fill="#1D204F"/><path d="M59.3617 43.9945V49.6702H58.0519V43.9945H59.3617Z" fill="#1D204F"/><path d="M63.9734 48.7261C63.786 49.05 63.5309 49.305 63.1987 49.5008C62.8665 49.6965 62.4928 49.7903 62.0752 49.7903C61.6754 49.7903 61.3183 49.6965 60.9944 49.5091C60.6705 49.3216 60.4238 49.0583 60.2458 48.7095C60.0667 48.3607 59.9824 47.9609 59.9824 47.5017V47.2206H62.9092C62.8665 47.0248 62.7562 46.8468 62.5771 46.7021C62.3979 46.5574 62.1689 46.4897 61.8878 46.4897C61.7264 46.4897 61.5473 46.5241 61.3432 46.5918C61.1475 46.6594 60.9861 46.7448 60.8758 46.8468L60.3229 46.0211C60.5187 45.842 60.7737 45.715 61.0798 45.6213C61.3942 45.5276 61.7181 45.4766 62.042 45.4766C62.4762 45.4766 62.8582 45.562 63.1904 45.7399C63.5392 45.9191 63.8026 46.1742 63.9984 46.4885C64.1941 46.8207 64.2961 47.1944 64.2961 47.6287C64.2961 48.0285 64.2024 48.3856 64.015 48.7095L63.9734 48.7261ZM62.6542 48.5813C62.7906 48.4366 62.8748 48.2669 62.9092 48.0878H61.2163C61.2412 48.2669 61.3266 48.4283 61.4547 48.573C61.5912 48.7178 61.7952 48.7854 62.0669 48.7854C62.322 48.7854 62.5177 48.7178 62.6542 48.573V48.5813Z" fill="#1D204F"/><path d="M66.2795 45.5704V46.09C66.4242 45.9109 66.6117 45.7661 66.8501 45.6475C67.0886 45.5277 67.3271 45.4684 67.5644 45.4684V46.7366C67.4706 46.7105 67.3603 46.6939 67.2405 46.6939C67.0613 46.6939 66.8751 46.7283 66.6876 46.7959C66.5002 46.8635 66.3637 46.9573 66.2878 47.0676V49.6717H64.978V45.5621L66.2795 45.5704Z" fill="#1D204F"/><path d="M73.2131 43.9945C73.6307 43.9945 73.9878 44.0799 74.2856 44.2496C74.5834 44.4193 74.8136 44.6494 74.9666 44.9389C75.1197 45.2284 75.1968 45.5428 75.1968 45.8916C75.1968 46.2404 75.1197 46.5548 74.9666 46.8359C74.8136 47.1171 74.5917 47.3378 74.2951 47.5003C73.9973 47.6617 73.6402 47.7471 73.2226 47.7471H71.844V49.6702H70.3812V43.9945H73.2131ZM73.4931 45.4158C73.3662 45.2972 73.2037 45.2367 73.0079 45.2367H71.8251V46.5132H73.0079C73.2037 46.5132 73.365 46.4539 73.4931 46.3341C73.6213 46.2154 73.6889 46.0624 73.6889 45.875C73.6889 45.6792 73.6296 45.5262 73.5014 45.4075L73.4931 45.4158Z" fill="#1D204F"/><path d="M77.1269 43.9945V49.6702H75.8171V43.9945H77.1269Z" fill="#1D204F"/><path d="M80.5072 49.2459C80.3791 49.3907 80.2011 49.5188 79.971 49.6113C79.7503 49.7051 79.5035 49.7478 79.2307 49.7478C79.01 49.7478 78.7881 49.6968 78.5675 49.5947C78.3551 49.4927 78.1676 49.3396 78.0229 49.1356C77.8782 48.9398 77.8105 48.6931 77.8105 48.3953C77.8105 47.9445 77.9553 47.6123 78.2365 47.4082C78.5176 47.2041 78.8403 47.1021 79.2235 47.1021C79.5047 47.1021 79.7598 47.1448 79.9888 47.2302C80.2189 47.3157 80.3886 47.4343 80.5072 47.5873V47.0689C80.5072 46.8898 80.4301 46.745 80.2865 46.6347C80.1418 46.5243 79.9377 46.4733 79.6744 46.4733C79.462 46.4733 79.2579 46.5077 79.0622 46.5837C78.8498 46.6608 78.6707 46.7711 78.5093 46.9159L78.0419 46.0901C78.2887 45.8778 78.5781 45.7152 78.9103 45.6132C79.2425 45.5112 79.5747 45.4602 79.9057 45.4602C80.4669 45.4602 80.9272 45.5883 81.2843 45.8434C81.6414 46.0984 81.8205 46.516 81.8205 47.1021V49.6718H80.5072V49.2637V49.2459ZM80.5072 48.2173C80.4396 48.1236 80.3376 48.056 80.2011 48.005C80.0647 47.9539 79.9199 47.9278 79.7669 47.9278C79.5795 47.9278 79.4264 47.9706 79.2995 48.056C79.1725 48.1414 79.112 48.26 79.112 48.4131C79.112 48.5661 79.1713 48.6859 79.2995 48.7702C79.4276 48.8544 79.5806 48.8971 79.7669 48.8971C79.9199 48.8971 80.0647 48.8722 80.2011 48.82C80.3293 48.769 80.4313 48.6931 80.5072 48.5993V48.2339V48.2173Z" fill="#1D204F"/><path d="M83.3408 49.4584C83.1201 49.2543 83.0086 48.9566 83.0086 48.5567V46.6929H82.3276V45.5528H83.0086V44.4293H84.3101V45.5528H85.1441V46.6929H84.3101V48.1902C84.3101 48.3183 84.3445 48.4203 84.4121 48.4962C84.4797 48.5722 84.5735 48.6066 84.6838 48.6066C84.7514 48.6066 84.8202 48.5983 84.8879 48.5805C84.9472 48.5639 84.9982 48.5378 85.0243 48.5128L85.2794 49.4999C85.1857 49.577 85.067 49.6447 84.9045 49.6957C84.7431 49.7467 84.5474 49.7728 84.3172 49.7728C83.8996 49.7728 83.5852 49.6708 83.3645 49.4667L83.3408 49.4584Z" fill="#1D204F"/><path d="M85.434 46.7001V45.56H86.1149V45.356C86.1149 44.9218 86.2514 44.573 86.5231 44.3096C86.8042 44.0462 87.153 43.9098 87.5861 43.9098C87.9349 43.9098 88.2244 43.9691 88.4545 44.0972L88.216 44.9906C88.1223 44.9312 88.012 44.9051 87.8839 44.9051C87.7474 44.9051 87.6371 44.9479 87.5517 45.0333C87.4662 45.1187 87.4235 45.2373 87.4235 45.3904V45.56H88.2576V46.7001H87.4235V49.6697H86.1138V46.7001H85.434Z" fill="#1D204F"/><path d="M89.5867 49.502C89.2379 49.3062 88.9828 49.0428 88.8037 48.7107C88.6245 48.3785 88.532 48.0131 88.532 47.6299C88.532 47.2466 88.6257 46.8895 88.8037 46.5574C88.9828 46.2335 89.2462 45.9701 89.5867 45.7743C89.9355 45.5786 90.327 45.4766 90.7695 45.4766C91.2286 45.4766 91.6285 45.5703 91.9607 45.766C92.3011 45.9618 92.5645 46.2252 92.7437 46.549C92.9228 46.8812 93.0165 47.2383 93.0165 47.6215C93.0165 48.0048 92.9228 48.3702 92.7437 48.7024C92.5645 49.0345 92.3095 49.2979 91.9607 49.4937C91.6285 49.6894 91.2286 49.7832 90.7695 49.7832C90.327 49.7832 89.9355 49.6811 89.5867 49.4854V49.502ZM91.4066 48.3524C91.568 48.1566 91.6534 47.9181 91.6534 47.6382C91.6534 47.3487 91.5763 47.1102 91.4149 46.9323C91.2536 46.7448 91.0317 46.6511 90.7517 46.6511C90.4705 46.6511 90.2582 46.7448 90.1051 46.9323C89.9521 47.1197 89.875 47.3582 89.875 47.6382C89.875 47.9276 89.9521 48.1661 90.1051 48.3524C90.2582 48.5398 90.48 48.6335 90.76 48.6335C91.04 48.6335 91.2619 48.5398 91.4232 48.3524H91.4066Z" fill="#1D204F"/><path d="M95.0069 45.5704V46.09C95.1517 45.9109 95.3391 45.7661 95.5776 45.6475C95.816 45.5277 96.0545 45.4684 96.2918 45.4684V46.7366C96.1981 46.7105 96.0877 46.6939 95.9679 46.6939C95.7887 46.6939 95.6025 46.7283 95.415 46.7959C95.2276 46.8635 95.0912 46.9573 95.0152 47.0676V49.6717H93.7054V45.5621L95.0069 45.5704Z" fill="#1D204F"/><path d="M102.069 47.1945C102.069 47.0249 102.026 46.8885 101.941 46.7864C101.855 46.6844 101.72 46.6334 101.533 46.6334C101.371 46.6334 101.227 46.6761 101.099 46.752C100.97 46.8291 100.868 46.9217 100.792 47.0332V49.6883H99.4827V47.1862C99.4827 47.0166 99.44 46.8802 99.3546 46.7781C99.2691 46.6761 99.1339 46.6251 98.9464 46.6251C98.6736 46.6251 98.4268 46.7615 98.2144 47.0249V49.68H96.9047V45.5704H98.2144V46.0722C98.3248 45.9275 98.5039 45.7911 98.7507 45.6641C98.9975 45.536 99.2703 45.4684 99.5681 45.4684C99.8659 45.4684 100.113 45.5277 100.308 45.6558C100.504 45.7839 100.649 45.9702 100.734 46.2004C100.862 46.0046 101.049 45.8349 101.313 45.6902C101.577 45.5455 101.85 45.4695 102.147 45.4695C102.539 45.4695 102.845 45.5716 103.057 45.7756C103.27 45.9797 103.381 46.2858 103.381 46.6951V49.6729H102.08V47.1708L102.069 47.1945Z" fill="#1D204F"/><path d="M106.765 49.2459C106.637 49.3907 106.459 49.5188 106.229 49.6113C106.008 49.7051 105.762 49.7478 105.489 49.7478C105.268 49.7478 105.046 49.6968 104.826 49.5947C104.613 49.4927 104.426 49.3396 104.281 49.1356C104.136 48.9398 104.069 48.6931 104.069 48.3953C104.069 47.9445 104.213 47.6123 104.495 47.4082C104.776 47.2041 105.099 47.1021 105.482 47.1021C105.763 47.1021 106.018 47.1448 106.247 47.2302C106.477 47.3157 106.647 47.4343 106.765 47.5873V47.0689C106.765 46.8898 106.688 46.745 106.545 46.6347C106.4 46.5243 106.196 46.4733 105.933 46.4733C105.72 46.4733 105.516 46.5077 105.32 46.5837C105.108 46.6608 104.929 46.7711 104.768 46.9159L104.3 46.0901C104.547 45.8778 104.836 45.7152 105.169 45.6132C105.501 45.5112 105.833 45.4602 106.164 45.4602C106.725 45.4602 107.185 45.5883 107.542 45.8434C107.9 46.0984 108.079 46.516 108.079 47.1021V49.6718H106.769V49.2637V49.2459H106.765ZM106.765 48.2173C106.698 48.1236 106.596 48.056 106.459 48.005C106.323 47.9539 106.178 47.9278 106.025 47.9278C105.838 47.9278 105.685 47.9706 105.558 48.056C105.43 48.1414 105.37 48.26 105.37 48.4131C105.37 48.5661 105.43 48.6859 105.558 48.7702C105.686 48.8556 105.839 48.8971 106.025 48.8971C106.178 48.8971 106.323 48.8722 106.459 48.82C106.587 48.769 106.689 48.6931 106.765 48.5993V48.2339V48.2173Z" fill="#1D204F"/><path d="M109.225 48.2339C109.387 48.3787 109.617 48.5068 109.897 48.6171C110.178 48.7275 110.441 48.7785 110.68 48.7785C110.859 48.7785 111.003 48.7536 111.096 48.7014C111.19 48.6504 111.233 48.5732 111.233 48.4807C111.233 48.3882 111.174 48.311 111.054 48.26C110.943 48.2173 110.764 48.1663 110.517 48.1236C110.169 48.0643 109.896 47.9955 109.667 47.9278C109.454 47.8602 109.259 47.7321 109.08 47.5541C108.91 47.375 108.824 47.1282 108.824 46.8055C108.824 46.5587 108.892 46.3286 109.029 46.1245C109.165 45.9205 109.369 45.7591 109.632 45.6393C109.896 45.5207 110.211 45.4602 110.577 45.4602C110.901 45.4602 111.215 45.5112 111.513 45.6049C111.802 45.6986 112.066 45.8256 112.296 46.0047L111.794 46.8731C111.667 46.745 111.488 46.6347 111.266 46.5493C111.044 46.4638 110.815 46.4211 110.585 46.4211C110.424 46.4211 110.296 46.4472 110.202 46.4982C110.108 46.5493 110.065 46.6169 110.065 46.7023C110.065 46.796 110.116 46.8637 110.218 46.9064C110.32 46.9491 110.491 46.9918 110.729 47.0345C111.077 47.0938 111.359 47.1614 111.588 47.2386C111.818 47.3157 112.022 47.4509 112.2 47.6301C112.379 47.8092 112.463 48.0726 112.463 48.4131C112.463 48.6765 112.386 48.9066 112.233 49.1107C112.08 49.3147 111.868 49.4761 111.586 49.5959C111.305 49.7145 110.974 49.7751 110.591 49.7751C110.234 49.7751 109.877 49.7157 109.518 49.6054C109.17 49.4951 108.889 49.342 108.676 49.1463L109.221 48.2446V48.2339H109.225Z" fill="#1D204F"/><path d="M114.459 45.5613V49.671H113.15V45.5613H114.459Z" fill="#1D204F"/></svg></a>
+    <nav class="nv">
+      <a href="#">Məhsullar</a><a href="#">Haqqımızda</a><a href="#">Tariflər</a><a href="#">Faydalı</a><a href="#">Əlaqə</a>
+    </nav>
+    <div class="nav-r">
+      <button class="lang">AZ</button>
+      <button class="iconbtn" aria-label="Axtarış">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.4-3.4"/></svg>
+      </button>
+      <a href="#" class="npill npill-soft">Sənəd yoxla</a>
+      <a href="#" class="npill npill-green">Kabinetə giriş
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+      </a>
+      <button class="burger" aria-label="Menyu"><svg width="18" height="13" viewBox="0 0 18 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1h16M1 6.5h16M1 12h16"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero hero-finmax" id="hero" aria-label="SİMA rəqəmsal həllər platforması">
+  <div class="hero-pin">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="w hero-content">
+      <div class="head">
+        <div class="hero-eyebrow"><span class="eyebrow-dot"></span> Vahid rəqəmsal platforma</div>
+        <h1>Bir SİMA.<br>Bir neçə rəqəmsal həll.</h1>
+        <p>Şəxsiyyətin təsdiqi, sənədlərin imzalanması, girişə nəzarət və biometrik ödəniş — hamısı vahid platformada.</p>
+        <div class="cta">
+          <a href="#hellər" class="btn b-green">Həllərlə tanış olun <span aria-hidden="true">↗</span></a>
+          <a href="#auditoriya" class="btn b-line">Qurumlar üçün <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <div class="stage" aria-label="SİMA məhsullarının vizual təqdimatı">
+        <div class="hero-pulse pulse-one" aria-hidden="true"></div>
+        <div class="hero-pulse pulse-two" aria-hidden="true"></div>
+        <!-- Floating UI panels are layered BELOW the phone; scroll pulls them behind it. -->
+        <div class="f f-doc" data-depth="1.0">
+          <div class="floating-eyebrow"><span class="fl-live"></span> SİMA İmza <span class="fl-plus">↗</span></div>
+          <span class="fl-label">Sənəd imzalandı</span>
+          <strong class="fl-value">Təsdiqləndi <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></strong>
+          <div class="fl-sep"></div><span class="fl-footer">Elektron imza <span>09:12</span></span>
+        </div>
+        <div class="f f-id" data-depth="1.1">
+          <div class="floating-eyebrow"><span class="fl-live"></span> SİMA KYC <span class="fl-plus">↗</span></div>
+          <span class="fl-label">Şəxsiyyət yoxlaması</span>
+          <strong class="fl-value">Uğurlu <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></strong>
+          <div class="fl-sep"></div><span class="fl-footer">Canlılıq təsdiqləndi <span>✓</span></span>
+        </div>
+        <div class="f f-acc" data-depth=".8">
+          <span class="acc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M13 3H5v18h8M17 8l5 4-5 4M9 12h12"/></svg></span>
+          <span class="acc-text"><b>SİMA Access</b><small>Giriş təsdiqləndi</small></span>
+          <span class="acc-ok">✓</span>
+        </div>
+        <div class="f f-pay" data-depth=".85">
+          <div class="pay-avatars" aria-hidden="true"><span>✓</span><span>✦</span><span>✓</span></div>
+          <div class="pay-copy"><b>SİMA Pay</b><span>Biometrik ödəniş</span></div>
+          <span class="pay-arrow" aria-hidden="true">↗</span>
+        </div>
+        <div class="f f-check f-check-l" aria-hidden="true"><span>✓</span></div>
+        <div class="f f-check f-check-r" aria-hidden="true"><span>✓</span></div>
+        <div class="phone" aria-label="SİMA tətbiqinin nümunə ekranı">
+          <div class="scr">
+            <div class="sbar"><b><span class="brand-spot">✦</span> SİMA</b><span class="phone-icons" aria-hidden="true">◯ &nbsp;⌕</span></div>
+            <div class="phone-top-text"><small>SİMA ilə rəqəmsal identifikasiya</small><h3>Kimliyin təsdiqlənir</h3><p>Üz tanıma ilə sürətli yoxlama</p></div>
+            <div class="faceart"><img src="data:image/png;base64,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" alt=""><span class="beam" aria-hidden="true"></span></div>
+            <div class="phone-status"><span class="phone-green-check">✓</span><span>Üz tanıma aparılır</span></div>
+            <div class="phone-actions" aria-hidden="true"><span>Təhlükəsiz</span><span>Rahat</span><span>Sürətli</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll-tip" aria-hidden="true"><span></span> Scroll et və kəşf et</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec dark sw">
+  <div class="w">
+    <div class="shead" style="max-width:26ch">
+      <h2>Rəqəmlərlə SİMA</h2>
+      <p>SİMA ekosisteminin ölçüsü və əhatəsi barədə əsas göstəricilər.</p>
+    </div>
+    <div class="sgrid">
+        <button class="sc" type="button">
+          <span class="sc-num">7 mln+</span>
+          <span class="sc-lbl">Tətbiq yüklənməsi</span>
+          <span class="sc-tell">Tətbiqin quraşdırılma sayıdır. Aktiv istifadəçi sayından fərqlənir.</span>
+        </button>
+        <button class="sc" type="button">
+          <span class="sc-num">1000+</span>
+          <span class="sc-lbl">SİMA ilə işləyən xidmət</span>
+          <span class="sc-tell">Dövlət portalları, banklar, sığorta şirkətləri, operatorlar və universitetlər daxil olmaqla.</span>
+        </button>
+        <button class="sc" type="button">
+          <span class="sc-num">10 mln+</span>
+          <span class="sc-lbl">İmzalanmış sənəd</span>
+          <span class="sc-tell">Hər biri hüquqi qüvvəyə malikdir və istənilən vaxt yoxlanıla bilər.</span>
+        </button>
+        <button class="sc" type="button">
+          <span class="sc-num">100+</span>
+          <span class="sc-lbl">Tərəfdaş qurum</span>
+          <span class="sc-tell">Bank, sığorta, telekom və dövlət qurumlarının sistemlərinə inteqrasiya olunub.</span>
+        </button>
+        </div>
+    <p class="sw-note">Göstəricilər 2026-cı ilin avqust ayına aiddir.</p>
+  </div>
+</section>
+
+<section class="sec light" id="hellər">
+  <div class="w">
+    <div class="srow">
+      <div class="shead">
+        <h2>Beş həll, bir platforma</h2>
+        <p>Hər həll şəxsiyyətin təsdiqinə xidmət edir; fərq tətbiq üsulundadır.</p>
+      </div>
+      <a href="#" class="btn b-line btn-sm">Bütün məhsullar</a>
+    </div>
+
+    <div class="pf">
+      <div class="pf-tabs" role="tablist" aria-label="Həllər">
+        <button class="pf-tab" role="tab" aria-selected="true" data-t="imza"><span class="pf-prog"><i></i></span>SİMA İmza</button>
+        <button class="pf-tab" role="tab" aria-selected="false" data-t="token"><span class="pf-prog"><i></i></span>SİMA Token</button>
+        <button class="pf-tab" role="tab" aria-selected="false" data-t="kyc"><span class="pf-prog"><i></i></span>SİMA KYC</button>
+        <button class="pf-tab" role="tab" aria-selected="false" data-t="access"><span class="pf-prog"><i></i></span>SİMA Access</button>
+        <button class="pf-tab" role="tab" aria-selected="false" data-t="pay"><span class="pf-prog"><i></i></span>SİMA Pay</button>
+        </div>
+      <div class="pf-panel">
+        <div class="pf-view on" data-v="imza" role="tabpanel">
+          <div>
+            <div class="pf-pt"><svg class="pf-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><h3>Sənədlər istənilən yerdən imzalanır</h3><p>Müqavilə, ərizə və bəyannamə mobil cihazda, filiala müraciət etmədən təsdiqlənir.</p></div></div>
+            <div class="pf-pt"><svg class="pf-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><h3>Hüquqi qüvvə əl imzasına bərabərdir</h3><p>Qanunvericiliyə əsasən əl imzası və möhürlə imzalanan sənədə bərabər tutulur.</p></div></div>
+            <div class="pf-certs"><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V6z"/></svg>Elektron imza haqqında Qanun</span><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Üztanıma və PIN ilə təsdiq</span><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Sertifikatın müddəti üç ildir</span></div>
+            <div class="pf-act"><a href="#" class="btn b-green">Tətbiqi yükləyin</a><a href="#" class="btn b-mute">Ətraflı</a></div>
+          </div>
+          <div class="pv" aria-hidden="true">
+            <div class="pv-win">
+              <b>Xidmət müqaviləsi imzalanır</b>
+              <u style="width:92%"></u><u style="width:74%"></u><u style="width:84%"></u>
+              <div class="pv-card"><em><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5 16c.7-1.6 1.7-2.3 3-2.3s2.3.7 3 2.3M14 10h5M14 14h3"/></svg></em><div><u style="width:70%"></u><u style="width:50%"></u><u style="width:62%"></u></div></div>
+            </div>
+            <div class="pv-ph">
+              <div class="pv-scr">
+                <p>İmzanı təsdiqlə</p>
+                <div class="pv-face"><span class="pv-ring"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
+                <div class="pv-foot"><u></u><u style="width:70%"></u><div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pf-view" data-v="token" role="tabpanel">
+          <div>
+            <div class="pf-pt"><svg class="pf-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><h3>İnternet bağlantısı tələb olunmur</h3><p>Toplu imzalama və sənəd yoxlaması oflayn rejimdə aparılır.</p></div></div>
+            <div class="pf-pt"><svg class="pf-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><h3>Fiziki daşıyıcı ilə qorunur</h3><p>Açıq açar infrastrukturu üzərində qurulub; üztanıma tələb etmir.</p></div></div>
+            <div class="pf-certs"><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Açıq açar infrastrukturu</span><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h9l5 5v13H5z"/><path d="M9 13h6"/></svg>EDOC və ADOC formatları</span><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>PIN qorunması</span></div>
+            <div class="pf-act"><a href="#" class="btn b-green">Token sifariş edin</a><a href="#" class="btn b-mute">Proqram təminatı</a></div>
+          </div>
+          <div class="pv" aria-hidden="true">
+            <div class="pv-win">
+              <b>Toplu imzalama hazırdır</b>
+              <u style="width:92%"></u><u style="width:74%"></u><u style="width:84%"></u>
+              <div class="pv-card"><em><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5 16c.7-1.6 1.7-2.3 3-2.3s2.3.7 3 2.3M14 10h5M14 14h3"/></svg></em><div><u style="width:70%"></u><u style="width:50%"></u><u style="width:62%"></u></div></div>
+            </div>
+            <div class="pv-ph">
+              <div class="pv-scr">
+                <p>Tokeni qoş</p>
+                <div class="pv-face"><span class="pv-ring"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h9"/><rect x="12" y="8" width="9" height="8" rx="2.5"/><path d="M6 9.5v5"/></svg></div>
+                <div class="pv-foot"><u></u><u style="width:70%"></u><div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pf-view" data-v="kyc" role="tabpanel">
+          <div>
+            <div class="pf-pt"><svg class="pf-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><h3>Müştəri uzaqdan tanınır</h3><p>Hesab açılışı və identifikasiya filial iştirakı olmadan tamamlanır.</p></div></div>
+            <div class="pf-pt"><svg class="pf-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><h3>Üç fərqli yoxlama metodu</h3><p>Avtomatik üztanıma, operatorla videozəng və ya videoyazı seçimləri mövcuddur.</p></div></div>
+            <div class="pf-certs"><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V6z"/></svg>Canlılıq yoxlaması</span><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18A15 15 0 0 1 12 3z"/></svg>Biometrik informasiya Qanunu</span><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>API və SDK ilə inteqrasiya</span></div>
+            <div class="pf-act"><a href="#" class="btn b-green">Demo tələb edin</a><a href="#" class="btn b-mute">Sənədləşmə</a></div>
+          </div>
+          <div class="pv" aria-hidden="true">
+            <div class="pv-win">
+              <b>Şəxsiyyət yoxlanılır</b>
+              <u style="width:92%"></u><u style="width:74%"></u><u style="width:84%"></u>
+              <div class="pv-card"><em><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5 16c.7-1.6 1.7-2.3 3-2.3s2.3.7 3 2.3M14 10h5M14 14h3"/></svg></em><div><u style="width:70%"></u><u style="width:50%"></u><u style="width:62%"></u></div></div>
+            </div>
+            <div class="pv-ph">
+              <div class="pv-scr">
+                <p>Kameraya bax</p>
+                <div class="pv-face"><span class="pv-ring"></span><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 42c0-15 11-25 26-25s26 10 26 25v9c0 17-12 30-26 30s-26-13-26-30z"/><circle cx="39" cy="48" r="3" fill="currentColor" stroke="none"/><circle cx="61" cy="48" r="3" fill="currentColor" stroke="none"/><path d="M50 52v9M43 68c4 3 10 3 14 0"/></svg></div>
+                <div class="pv-foot"><u></u><u style="width:70%"></u><div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pf-view" data-v="access" role="tabpanel">
+          <div>
+            <div class="pf-pt"><svg class="pf-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><h3>Girişə üztanıma ilə nəzarət</h3><p>Kart və açar tələb olunmur; əməkdaş, qonaq və podratçı üçün ayrı icazə səviyyələri müəyyən edilir.</p></div></div>
+            <div class="pf-pt"><svg class="pf-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><h3>Hər keçid qeydə alınır</h3><p>Giriş-çıxış hesabatları, qara siyahı və iş vaxtı uçotu dəstəklənir.</p></div></div>
+            <div class="pf-certs"><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 20h10M12 16v4"/></svg>Turniket inteqrasiyası</span><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>Qara siyahı idarəetməsi</span><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>İş vaxtı hesabatları</span></div>
+            <div class="pf-act"><a href="#" class="btn b-green">Demo tələb edin</a><a href="#" class="btn b-mute">Ətraflı</a></div>
+          </div>
+          <div class="pv" aria-hidden="true">
+            <div class="pv-win">
+              <b>Giriş icazələri idarə olunur</b>
+              <u style="width:92%"></u><u style="width:74%"></u><u style="width:84%"></u>
+              <div class="pv-card"><em><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5 16c.7-1.6 1.7-2.3 3-2.3s2.3.7 3 2.3M14 10h5M14 14h3"/></svg></em><div><u style="width:70%"></u><u style="width:50%"></u><u style="width:62%"></u></div></div>
+            </div>
+            <div class="pv-ph">
+              <div class="pv-scr">
+                <p>Qapıya yaxınlaş</p>
+                <div class="pv-face"><span class="pv-ring"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7"/><path d="M14 3v18M18 12h4M19 9l3 3-3 3"/></svg></div>
+                <div class="pv-foot"><u></u><u style="width:70%"></u><div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pf-view" data-v="pay" role="tabpanel">
+          <div>
+            <div class="pf-pt"><svg class="pf-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><h3>Kart və nağd pul tələb olunmur</h3><p>Müştəri kassada üztanıma ilə identifikasiya olunur və əməliyyat tamamlanır.</p></div></div>
+            <div class="pf-pt"><svg class="pf-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><h3>Mövcud sistemlərə inteqrasiya olunur</h3><p>Kassa və POS avadanlığı ilə uyğun işləyir.</p></div></div>
+            <div class="pf-certs"><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V6z"/></svg>Canlılıq yoxlaması</span><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 20h10M12 16v4"/></svg>Kassa və POS inteqrasiyası</span><span class="pf-cert"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Seçilmiş məntəqələrdə</span></div>
+            <div class="pf-act"><a href="#" class="btn b-green">Əlaqə saxlayın</a><a href="#" class="btn b-mute">Ətraflı</a></div>
+          </div>
+          <div class="pv" aria-hidden="true">
+            <div class="pv-win">
+              <b>Ödəniş təsdiqlənir</b>
+              <u style="width:92%"></u><u style="width:74%"></u><u style="width:84%"></u>
+              <div class="pv-card"><em><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5 16c.7-1.6 1.7-2.3 3-2.3s2.3.7 3 2.3M14 10h5M14 14h3"/></svg></em><div><u style="width:70%"></u><u style="width:50%"></u><u style="width:62%"></u></div></div>
+            </div>
+            <div class="pv-ph">
+              <div class="pv-scr">
+                <p>Üzünü göstər</p>
+                <div class="pv-face"><span class="pv-ring"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/><circle cx="8" cy="14.5" r="1.5"/></svg></div>
+                <div class="pv-foot"><u></u><u style="width:70%"></u><div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec dark" id="xidmetler">
+  <div class="w fd">
+    <div class="fd-l">
+      <h2>SİMA harada işləyir?</h2>
+      <p>1000-dən çox dövlət və özəl xidmət platforma ilə inteqrasiya olunub: dövlət portalları, banklar, sığorta şirkətləri, operatorlar və universitetlər.</p>
+      <a href="#" class="btn b-wire btn-sm">Tam siyahı</a>
+    </div>
+    <div>
+      <div class="fglass">
+      <div class="sbox">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(139,164,169,.9)" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="q" placeholder="Vergi, bank, notariat, məhkəmə…" aria-label="Xidmət axtar">
+      </div>
+      <div class="cats" role="group" aria-label="Kateqoriya">
+        <button class="cat" aria-pressed="true" data-c="hamısı">Hamısı</button>
+        <button class="cat" aria-pressed="false" data-c="dövlət">Dövlət</button>
+        <button class="cat" aria-pressed="false" data-c="bank">Bank və maliyyə</button>
+        <button class="cat" aria-pressed="false" data-c="sığorta">Sığorta</button>
+        <button class="cat" aria-pressed="false" data-c="telekom">Telekom</button>
+        <button class="cat" aria-pressed="false" data-c="təhsil">Təhsil</button>
+      </div>
+      <div class="svcs" id="svcs"></div>
+      <p class="nores" id="nores">Bu ad üzrə nəticə tapılmadı. Fərqli yazılış sınayın və ya bizə məlumat verin.</p>
+      <div class="fd-f"><span id="cnt"></span><span>Siyahı həftəlik yenilənir</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec light" id="auditoriya">
+  <div class="w">
+    <div class="shead" style="max-width:28ch">
+      <h2>Fərdi istifadəçilər və qurumlar üçün</h2>
+      <p>Fərdi istifadə və qurum inteqrasiyası üçün şərtlər fərqlidir.</p>
+    </div>
+    <div class="auds">
+      <div class="aud aud-me">
+        <h3>Fərdi istifadə</h3>
+        <p>Vətəndaş, fərdi sahibkar, hüquqi şəxs və dövlət qurumu əməkdaşı.</p>
+        <ul class="alist">
+          <li><i></i>Sənədlər istənilən yerdən imzalanır</li>
+          <li><i></i>Xidmətlərə parol tələb olunmadan giriş</li>
+          <li><i></i>Hesab açılışında şəxsiyyətin uzaqdan təsdiqi</li>
+          <li><i></i>Alınan sənədin həqiqiliyinin yoxlanması</li>
+        </ul>
+        <div class="prc">
+          <b>Vətəndaş üçün pulsuz</b>
+          <span>Sahibkar və hüquqi şəxslər üçün: ayda 2.40 ₼, ildə 25 ₼, üç ilə 55 ₼. 6AYPULSUZ promokodu ilk altı ayı əhatə edir.</span>
+        </div>
+        <div class="aact"><a href="#" class="btn b-ink">Tətbiqi yükləyin</a><a href="#" class="btn b-line">Tariflər</a></div>
+      </div>
+      <div class="aud aud-biz">
+        <h3>Qurumlar üçün</h3>
+        <p>Bank, sığorta, telekom, ticarət şəbəkələri və dövlət qurumları.</p>
+        <ul class="alist">
+          <li><i></i>Müştərinin filial olmadan tanınması</li>
+          <li><i></i>Müqavilələrin hüquqi qüvvə ilə onlayn imzalanması</li>
+          <li><i></i>Ofisə girişin üztanıma ilə idarə olunması</li>
+          <li><i></i>Biometrik identifikasiya ilə ödənişin qəbulu</li>
+        </ul>
+        <div class="prc">
+          <b>Fərdi təklif</b>
+          <span>Həll, həcm və inteqrasiya modelinə əsasən müəyyən edilir. Test mühiti pulsuzdur.</span>
+        </div>
+        <div class="aact"><a href="#" class="btn b-green">Tərəfdaşlıq müraciəti</a><a href="#developer" class="btn b-wire">Sənədləşmə</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-sm light" id="yoxla">
+  <div class="w">
+    <div class="aurora">
+      <div class="aurora-in">
+        <div>
+          <h2>Sənədin həqiqiliyini yoxlayın</h2>
+          <p>İmzalayan şəxs, imza tarixi və sonrakı dəyişikliklər barədə məlumat göstərilir.</p>
+          <p class="aurora-note">Xidmət SİMA istifadəçisi olmayan şəxslər üçün də açıqdır.</p>
+        </div>
+        <div class="glass">
+          <span class="glass-i"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span>
+          <h3>Sənədi yükləyin</h3>
+          <p>Eyni anda bir neçə sənəd yoxlanıla bilər</p>
+          <button class="btn b-glass">Sənəd seçin</button>
+          <span class="glass-f">EDOC, ADOC və PAdES formatları</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec mint">
+  <div class="w">
+    <div class="tc-head">
+      <span class="tag">Etibar</span>
+      <h2>Nəyə görə etibarlıdır?</h2>
+      <p>Məlumatların qorunması, nəzarət strukturu və hüquqi status barədə.</p>
+    </div>
+    <div class="tgrid">
+      <div class="tc">
+        <span class="tc-i"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <h3>Biometrik təqlid mümkün deyil</h3>
+        <p>Hər üztanımada canlılıq yoxlaması aparılır; şəkil, video və ya maska ilə keçid mümkün deyil.</p>
+      </div>
+      <div class="tc">
+        <span class="tc-i"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+        <h3>Biometrik məlumat ötürülmür</h3>
+        <p>Üz məlumatı şifrələnmiş formada saxlanılır. Tərəfdaş qurum yalnız yoxlamanın nəticəsini alır.</p>
+      </div>
+      <div class="tc">
+        <span class="tc-i"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+        <h3>Hüquqi qüvvə təsdiqlənib</h3>
+        <p>İmzalanan sənəd qanunvericiliyə əsasən əl imzası və möhürlə imzalanan sənədə bərabər tutulur.</p>
+      </div>
+      <div class="tc">
+        <span class="tc-i"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+        <h3>Əməliyyatlar qeydə alınır</h3>
+        <p>İmzalanma, keçid və ödəniş əməliyyatları zaman damğası ilə qeydə alınır və yoxlanıla bilər.</p>
+      </div>
+      <div class="tc">
+        <span class="tc-i"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V9l7-5 7 5v12"/><path d="M10 21v-6h4v6"/></svg></span>
+        <h3>Dövlət infrastrukturunda</h3>
+        <p>Platforma AzInTelecom tərəfindən idarə olunur, məlumatlar Azərbaycan hüdudlarında saxlanılır.</p>
+      </div>
+      <div class="tc">
+        <span class="tc-i"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 7h10"/><path d="m4 12 3-5 3 5a3 3 0 0 1-6 0zM14 12l3-5 3 5a3 3 0 0 1-6 0z"/></svg></span>
+        <h3>Qanunvericilik çərçivəsində</h3>
+        <p>Elektron imza, elektron sənəd və biometrik informasiya haqqında qanunlar əsasında fəaliyyət göstərir.</p>
+      </div>
+    </div>
+    <div class="tc-cta">
+      <a href="#" class="arrowbtn">Təhlükəsizlik haqqında<span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span></a>
+    </div>
+  </div>
+</section>
+
+<section class="sec light">
+  <div class="w">
+    <div class="srow">
+      <div class="shead"><h2>Xəbərlər və yeniliklər</h2></div>
+      <a href="#" class="btn b-line btn-sm">Bütün xəbərlər</a>
+    </div>
+    <div class="nws">
+      <a href="#" class="feat">
+        <div class="feat-art">
+          <span class="feat-k">Tərəfdaşlıq</span>
+          <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round" opacity=".5"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 20h10M12 18v2M8 9h8M8 13h5"/></svg>
+        </div>
+        <div class="feat-b">
+          <span class="dt">11 avqust 2026</span>
+          <h3>“Azeronline”da müqavilələr SİMA İmza ilə tam rəqəmsal</h3>
+          <p>Abunəçi müqavilələri məsafədən, bir neçə dəqiqə ərzində imzalanır. Operator filial ziyarəti tələbini aradan qaldırdı.</p>
+          <span class="lnk">Ətraflı oxu</span>
+        </div>
+      </a>
+      <div class="nlist">
+        <a href="#" class="nit">
+          <em><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity=".6"><path d="M3 21h18M5 21V9l7-5 7 5v12M10 21v-6h4v6"/></svg></em>
+          <span><span class="dt">28 iyul 2026</span><h3>Üztanıma həlli kirayə mənzil seçimində tətbiq olunacaq</h3></span>
+        </a>
+        <a href="#" class="nit">
+          <em><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity=".6"><path d="M5 3h9l5 5v13H5z"/><path d="M9 13h6M9 17h4"/></svg></em>
+          <span><span class="dt">13 iyul 2026</span><h3>SİMA İmza ilə bütün vergi xidmətləri cibinizdə</h3></span>
+        </a>
+        <a href="#" class="nit">
+          <em><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity=".6"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></em>
+          <span><span class="dt">2 iyul 2026</span><h3>Elektron imzanı başqasına vermək hansı riskləri yaradır?</h3></span>
+        </a>
+        <a href="#" class="nit">
+          <em><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity=".6"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></em>
+          <span><span class="dt">19 iyun 2026</span><h3>SİMA istifadəçilərinin sayı 7 milyona yaxınlaşdı</h3></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="ft ft-finmax" id="footer">
+  <div class="w">
+    <div class="ft-headline">
+      <a href="#hero" class="ft-sign" aria-label="SİMA — ana səhifəyə keçid"><svg class="logo" fill="none" height="56" viewbox="0 0 119 56" width="119" xmlns="http://www.w3.org/2000/svg"><path d="M41.6667 4.76093H32.9242V9.89801H41.6667V4.76093Z" fill="#1D204F"></path><path d="M8.73097 27.3168C10.895 29.3942 14.1409 31.0385 18.0358 31.0385C19.6802 31.0385 21.2391 30.4762 21.2391 29.3503C21.2391 28.2256 20.0278 27.662 17.171 27.1424C12.41 26.2763 5.13858 25.1516 5.13858 17.9241C5.13858 13.0338 9.20672 8.57539 17.1271 8.57539C21.8441 8.57539 26.0867 9.9172 29.3754 12.6008L24.701 18.7902C22.1906 16.8861 18.9446 15.9334 16.6501 15.9334C14.4862 15.9334 14.0104 16.7128 14.0104 17.4484C14.0104 18.5743 15.179 18.9634 18.2518 19.4831C23.0127 20.3052 30.067 21.6909 30.067 28.3561C30.067 34.7187 25.3487 38.3977 17.6028 38.3977C11.4573 38.3977 7.25866 36.5801 4.18591 33.8099L8.73097 27.3168Z" fill="#1D204F"></path><path d="M32.9242 37.8772V12.1219H41.6667V37.8772H32.9242Z" fill="#1D204F"></path><path d="M46.3418 33.152V37.8797H51.0719L46.3418 33.152Z" fill="#1D204F"></path><path d="M69.9366 37.8783H78.6792V23.5598L69.9366 32.3023V37.8783Z" fill="#1D204F"></path><path d="M104.984 37.8786L103.858 34.1569H92.7786L91.6539 37.8786H82.1758L92.8224 9.01015H103.816L114.462 37.8786H104.984ZM98.319 16.7146L95.0303 26.8855H101.609L98.319 16.7146Z" fill="#1D204F"></path><path d="M78.6792 4.7728V16.9748L69.9367 25.7197L57.7762 37.879L51.6639 31.7667L51.6663 31.7632L46.3418 26.4387V14.2212L46.3454 14.2177L57.7786 25.6509L78.6686 4.76093L78.6792 4.7728Z" fill="#00B04E"></path><path d="M5.64052 47.7471V49.6702H4.17651V43.9945H7.01792C7.42604 43.9945 7.78314 44.0799 8.08211 44.2413C8.3882 44.4026 8.61836 44.6328 8.7631 44.914C8.91614 45.2035 8.99326 45.5262 8.99326 45.8844C8.99326 46.3353 8.88292 46.7007 8.66107 46.9902C8.44871 47.2713 8.18414 47.4754 7.86975 47.5857L9.02648 49.6702H7.35011L6.39744 47.7471H5.64052ZM7.29909 45.4241C7.16266 45.3043 6.993 45.245 6.79725 45.245H5.64052V46.5215H6.79725C6.993 46.5215 7.16266 46.4622 7.29909 46.3424C7.43553 46.2238 7.50315 46.0695 7.50315 45.875C7.50315 45.6792 7.43553 45.5262 7.29909 45.4075V45.4241Z" fill="#1D204F"></path><path d="M13.4339 48.7261C13.2464 49.05 12.9914 49.305 12.6592 49.5008C12.327 49.6965 11.9533 49.7903 11.5357 49.7903C11.1359 49.7903 10.7787 49.6965 10.4549 49.5091C10.131 49.3216 9.88539 49.0583 9.70625 48.7095C9.5271 48.3607 9.44287 47.9609 9.44287 47.5017V47.2206H12.3697C12.327 47.0248 12.2167 46.8468 12.0375 46.7021C11.8584 46.5574 11.6294 46.4897 11.3482 46.4897C11.1869 46.4897 11.0077 46.5241 10.8037 46.5918C10.6079 46.6594 10.4466 46.7448 10.3362 46.8468L9.78337 46.0211C9.97912 45.842 10.2342 45.715 10.5403 45.6213C10.8547 45.5276 11.1786 45.4766 11.5013 45.4766C11.9355 45.4766 12.3175 45.562 12.6497 45.7399C12.9985 45.9191 13.2619 46.1742 13.4576 46.4885C13.6534 46.8207 13.7554 47.1944 13.7554 47.6287C13.7554 48.0285 13.6617 48.3856 13.4742 48.7095L13.4339 48.7261ZM12.1158 48.5813C12.2522 48.4366 12.3365 48.2669 12.3709 48.0878H10.6779C10.704 48.2669 10.7882 48.4283 10.9164 48.573C11.0528 48.7178 11.2569 48.7854 11.5285 48.7854C11.7836 48.7854 11.9794 48.7178 12.1158 48.573V48.5813Z" fill="#1D204F"></path><path d="M17.1951 49.1934C16.8712 49.5849 16.4631 49.7806 15.9778 49.7806C15.629 49.7806 15.3146 49.6952 15.0418 49.5255C14.7701 49.3559 14.5565 49.1091 14.4035 48.7852C14.2505 48.4614 14.1733 48.071 14.1733 47.619C14.1733 47.1682 14.2505 46.7767 14.4035 46.4528C14.5565 46.1289 14.7689 45.8833 15.0418 45.7125C15.3135 45.5428 15.629 45.4574 15.9778 45.4574C16.4714 45.4574 16.8795 45.6532 17.1951 46.0364V45.5594H18.4965V51.2351H17.1951V49.1934ZM17.1951 47.0068C17.118 46.8882 16.9993 46.7945 16.8546 46.7352C16.7015 46.6675 16.5568 46.6331 16.4121 46.6331C16.1487 46.6331 15.9351 46.7268 15.7655 46.9048C15.5958 47.084 15.5104 47.3212 15.5104 47.619C15.5104 47.9334 15.5958 48.1719 15.7655 48.351C15.9351 48.5302 16.1487 48.6239 16.4121 48.6239C16.5485 48.6239 16.6932 48.5895 16.8463 48.5219C16.9993 48.4542 17.118 48.3605 17.1951 48.249V46.9985V47.0068Z" fill="#1D204F"></path><path d="M23.1191 48.7261C22.9316 49.05 22.6765 49.305 22.3444 49.5008C22.0122 49.6965 21.6385 49.7903 21.2208 49.7903C20.821 49.7903 20.4639 49.6965 20.14 49.5091C19.8162 49.3216 19.5706 49.0583 19.3914 48.7095C19.2123 48.3607 19.1281 47.9609 19.1281 47.5017V47.2206H22.0549C22.0122 47.0248 21.9018 46.8468 21.7227 46.7021C21.5435 46.5574 21.3146 46.4897 21.0334 46.4897C20.872 46.4897 20.6929 46.5241 20.4888 46.5918C20.2931 46.6594 20.1317 46.7448 20.0214 46.8468L19.4685 46.0211C19.6643 45.842 19.9194 45.715 20.2255 45.6213C20.5399 45.5276 20.8637 45.4766 21.1864 45.4766C21.6207 45.4766 22.0027 45.562 22.3349 45.7399C22.6837 45.9191 22.947 46.1742 23.1428 46.4885C23.3386 46.8207 23.4406 47.1944 23.4406 47.6287C23.4406 48.0285 23.3469 48.3856 23.1594 48.7095L23.1191 48.7261ZM21.7998 48.5813C21.9362 48.4366 22.0205 48.2669 22.0549 48.0878H20.3619C20.388 48.2669 20.4722 48.4283 20.6004 48.573C20.7368 48.7178 20.9409 48.7854 21.2125 48.7854C21.4676 48.7854 21.6634 48.7178 21.7998 48.573V48.5813Z" fill="#1D204F"></path><path d="M29.2963 47.1945C29.2963 47.0249 29.2536 46.8885 29.1682 46.7864C29.0828 46.6844 28.9475 46.6334 28.7601 46.6334C28.5987 46.6334 28.454 46.6761 28.3258 46.752C28.1977 46.8291 28.0957 46.9217 28.0198 47.0332V49.6883H26.71V47.1862C26.71 47.0166 26.6673 46.8802 26.5819 46.7781C26.4964 46.6761 26.3612 46.6251 26.1737 46.6251C25.9021 46.6251 25.6553 46.7615 25.4417 47.0249V49.68H24.132V45.5704H25.4417V46.0722C25.5521 45.9275 25.7312 45.7911 25.978 45.6641C26.2248 45.536 26.4964 45.4684 26.7942 45.4684C27.092 45.4684 27.3388 45.5277 27.5345 45.6558C27.7303 45.7839 27.875 45.9702 27.9604 46.2004C28.0886 46.0046 28.2748 45.8349 28.5394 45.6902C28.8028 45.5455 29.0756 45.4695 29.3734 45.4695C29.7649 45.4695 30.071 45.5716 30.2834 45.7756C30.4958 45.9797 30.6073 46.2858 30.6073 46.6951V49.6729H29.3058V47.1708L29.2963 47.1945Z" fill="#1D204F"></path><path d="M31.7649 48.2339C31.9263 48.3787 32.1564 48.5068 32.4376 48.6171C32.7188 48.7275 32.9821 48.7785 33.2206 48.7785C33.3998 48.7785 33.5445 48.7536 33.637 48.7014C33.7308 48.6504 33.7735 48.5732 33.7735 48.4807C33.7735 48.3882 33.7141 48.311 33.5943 48.26C33.484 48.2173 33.3048 48.1663 33.0581 48.1236C32.7093 48.0643 32.4364 47.9955 32.2074 47.9278C31.9951 47.8602 31.7993 47.7321 31.6202 47.5541C31.4505 47.375 31.3651 47.1282 31.3651 46.8055C31.3651 46.5587 31.4327 46.3286 31.5692 46.1245C31.7056 45.9205 31.9096 45.7591 32.173 45.6393C32.4364 45.5207 32.752 45.4602 33.1174 45.4602C33.4413 45.4602 33.7557 45.5112 34.0535 45.6049C34.3429 45.6986 34.6063 45.8256 34.8365 46.0047L34.3346 46.8731C34.2065 46.745 34.0285 46.6347 33.8067 46.5493C33.5848 46.4638 33.3559 46.4211 33.1257 46.4211C32.9643 46.4211 32.8362 46.4472 32.7425 46.4982C32.6488 46.5493 32.6061 46.6169 32.6061 46.7023C32.6061 46.796 32.6571 46.8637 32.7591 46.9064C32.8611 46.9491 33.0308 46.9918 33.2693 47.0345C33.618 47.0938 33.8992 47.1614 34.1282 47.2386C34.3584 47.3157 34.5624 47.4509 34.7404 47.6301C34.9195 47.8092 35.0038 48.0726 35.0038 48.4131C35.0038 48.6765 34.9266 48.9066 34.7736 49.1107C34.6205 49.3147 34.4082 49.4761 34.127 49.5959C33.8458 49.7145 33.5148 49.7751 33.1316 49.7751C32.7745 49.7751 32.4174 49.7157 32.0591 49.6054C31.7103 49.4951 31.4292 49.342 31.2168 49.1463L31.7613 48.2446V48.2339H31.7649Z" fill="#1D204F"></path><path d="M38.1134 49.2459C37.9853 49.3907 37.8073 49.5188 37.5772 49.6113C37.3565 49.7051 37.1097 49.7478 36.8369 49.7478C36.6162 49.7478 36.3943 49.6968 36.1737 49.5947C35.9613 49.4927 35.7739 49.3396 35.6291 49.1356C35.4844 48.9398 35.4167 48.6931 35.4167 48.3953C35.4167 47.9445 35.5615 47.6123 35.8427 47.4082C36.1238 47.2041 36.4465 47.1021 36.8297 47.1021C37.1109 47.1021 37.366 47.1448 37.595 47.2302C37.8251 47.3157 37.9948 47.4343 38.1134 47.5873V47.0689C38.1134 46.8898 38.0363 46.745 37.8927 46.6347C37.748 46.5243 37.5439 46.4733 37.2806 46.4733C37.0682 46.4733 36.8641 46.5077 36.6684 46.5837C36.456 46.6608 36.2769 46.7711 36.1155 46.9159L35.6481 46.0901C35.8949 45.8778 36.1843 45.7152 36.5165 45.6132C36.8487 45.5112 37.1797 45.4602 37.5119 45.4602C38.0731 45.4602 38.5334 45.5883 38.8905 45.8434C39.2476 46.0984 39.4267 46.516 39.4267 47.1021V49.6718H38.117V49.2637V49.2459H38.1134ZM38.1134 48.2173C38.0458 48.1236 37.9438 48.056 37.8073 48.005C37.6709 47.9539 37.5261 47.9278 37.3731 47.9278C37.1857 47.9278 37.0326 47.9706 36.9057 48.056C36.7787 48.1414 36.7182 48.26 36.7182 48.4131C36.7182 48.5661 36.7775 48.6859 36.9057 48.7702C37.0338 48.8544 37.1868 48.8971 37.3731 48.8971C37.5261 48.8971 37.6709 48.8722 37.8073 48.82C37.9355 48.769 38.0375 48.6931 38.1134 48.5993V48.2339V48.2173Z" fill="#1D204F"></path><path d="M41.6867 43.9945V49.6702H40.377V43.9945H41.6867Z" fill="#1D204F"></path><path d="M46.3143 47.39V49.6702H44.8503V43.9945H46.3143V46.1134H48.6717V43.9945H50.1345V49.6702H48.6717V47.39H46.3143Z" fill="#1D204F"></path><path d="M54.7831 48.7261C54.5957 49.05 54.3406 49.305 54.0084 49.5008C53.6762 49.6965 53.3025 49.7903 52.8849 49.7903C52.4851 49.7903 52.128 49.6965 51.8041 49.5091C51.4802 49.3216 51.2346 49.0583 51.0555 48.7095C50.8763 48.3607 50.7921 47.9609 50.7921 47.5017V47.2206H53.7189C53.6762 47.0248 53.5659 46.8468 53.3867 46.7021C53.2076 46.5574 52.9786 46.4897 52.6975 46.4897C52.5361 46.4897 52.357 46.5241 52.1529 46.5918C51.9571 46.6594 51.7958 46.7448 51.6855 46.8468L51.1326 46.0211C51.3284 45.842 51.5834 45.715 51.8895 45.6213C52.2039 45.5276 52.5278 45.4766 52.8505 45.4766C53.2847 45.4766 53.6667 45.562 53.9989 45.7399C54.3477 45.9191 54.6111 46.1742 54.8069 46.4885C55.0026 46.8207 55.1046 47.1944 55.1046 47.6287C55.1046 48.0285 55.0109 48.3856 54.8235 48.7095L54.7831 48.7261ZM53.4639 48.5813C53.6003 48.4366 53.6845 48.2669 53.7189 48.0878H52.026C52.0521 48.2669 52.1363 48.4283 52.2644 48.573C52.4009 48.7178 52.6049 48.7854 52.8766 48.7854C53.1317 48.7854 53.3274 48.7178 53.4639 48.573V48.5813Z" fill="#1D204F"></path><path d="M57.0976 43.9945V49.6702H55.7878V43.9945H57.0976Z" fill="#1D204F"></path><path d="M59.3617 43.9945V49.6702H58.0519V43.9945H59.3617Z" fill="#1D204F"></path><path d="M63.9734 48.7261C63.786 49.05 63.5309 49.305 63.1987 49.5008C62.8665 49.6965 62.4928 49.7903 62.0752 49.7903C61.6754 49.7903 61.3183 49.6965 60.9944 49.5091C60.6705 49.3216 60.4238 49.0583 60.2458 48.7095C60.0667 48.3607 59.9824 47.9609 59.9824 47.5017V47.2206H62.9092C62.8665 47.0248 62.7562 46.8468 62.5771 46.7021C62.3979 46.5574 62.1689 46.4897 61.8878 46.4897C61.7264 46.4897 61.5473 46.5241 61.3432 46.5918C61.1475 46.6594 60.9861 46.7448 60.8758 46.8468L60.3229 46.0211C60.5187 45.842 60.7737 45.715 61.0798 45.6213C61.3942 45.5276 61.7181 45.4766 62.042 45.4766C62.4762 45.4766 62.8582 45.562 63.1904 45.7399C63.5392 45.9191 63.8026 46.1742 63.9984 46.4885C64.1941 46.8207 64.2961 47.1944 64.2961 47.6287C64.2961 48.0285 64.2024 48.3856 64.015 48.7095L63.9734 48.7261ZM62.6542 48.5813C62.7906 48.4366 62.8748 48.2669 62.9092 48.0878H61.2163C61.2412 48.2669 61.3266 48.4283 61.4547 48.573C61.5912 48.7178 61.7952 48.7854 62.0669 48.7854C62.322 48.7854 62.5177 48.7178 62.6542 48.573V48.5813Z" fill="#1D204F"></path><path d="M66.2795 45.5704V46.09C66.4242 45.9109 66.6117 45.7661 66.8501 45.6475C67.0886 45.5277 67.3271 45.4684 67.5644 45.4684V46.7366C67.4706 46.7105 67.3603 46.6939 67.2405 46.6939C67.0613 46.6939 66.8751 46.7283 66.6876 46.7959C66.5002 46.8635 66.3637 46.9573 66.2878 47.0676V49.6717H64.978V45.5621L66.2795 45.5704Z" fill="#1D204F"></path><path d="M73.2131 43.9945C73.6307 43.9945 73.9878 44.0799 74.2856 44.2496C74.5834 44.4193 74.8136 44.6494 74.9666 44.9389C75.1197 45.2284 75.1968 45.5428 75.1968 45.8916C75.1968 46.2404 75.1197 46.5548 74.9666 46.8359C74.8136 47.1171 74.5917 47.3378 74.2951 47.5003C73.9973 47.6617 73.6402 47.7471 73.2226 47.7471H71.844V49.6702H70.3812V43.9945H73.2131ZM73.4931 45.4158C73.3662 45.2972 73.2037 45.2367 73.0079 45.2367H71.8251V46.5132H73.0079C73.2037 46.5132 73.365 46.4539 73.4931 46.3341C73.6213 46.2154 73.6889 46.0624 73.6889 45.875C73.6889 45.6792 73.6296 45.5262 73.5014 45.4075L73.4931 45.4158Z" fill="#1D204F"></path><path d="M77.1269 43.9945V49.6702H75.8171V43.9945H77.1269Z" fill="#1D204F"></path><path d="M80.5072 49.2459C80.3791 49.3907 80.2011 49.5188 79.971 49.6113C79.7503 49.7051 79.5035 49.7478 79.2307 49.7478C79.01 49.7478 78.7881 49.6968 78.5675 49.5947C78.3551 49.4927 78.1676 49.3396 78.0229 49.1356C77.8782 48.9398 77.8105 48.6931 77.8105 48.3953C77.8105 47.9445 77.9553 47.6123 78.2365 47.4082C78.5176 47.2041 78.8403 47.1021 79.2235 47.1021C79.5047 47.1021 79.7598 47.1448 79.9888 47.2302C80.2189 47.3157 80.3886 47.4343 80.5072 47.5873V47.0689C80.5072 46.8898 80.4301 46.745 80.2865 46.6347C80.1418 46.5243 79.9377 46.4733 79.6744 46.4733C79.462 46.4733 79.2579 46.5077 79.0622 46.5837C78.8498 46.6608 78.6707 46.7711 78.5093 46.9159L78.0419 46.0901C78.2887 45.8778 78.5781 45.7152 78.9103 45.6132C79.2425 45.5112 79.5747 45.4602 79.9057 45.4602C80.4669 45.4602 80.9272 45.5883 81.2843 45.8434C81.6414 46.0984 81.8205 46.516 81.8205 47.1021V49.6718H80.5072V49.2637V49.2459ZM80.5072 48.2173C80.4396 48.1236 80.3376 48.056 80.2011 48.005C80.0647 47.9539 79.9199 47.9278 79.7669 47.9278C79.5795 47.9278 79.4264 47.9706 79.2995 48.056C79.1725 48.1414 79.112 48.26 79.112 48.4131C79.112 48.5661 79.1713 48.6859 79.2995 48.7702C79.4276 48.8544 79.5806 48.8971 79.7669 48.8971C79.9199 48.8971 80.0647 48.8722 80.2011 48.82C80.3293 48.769 80.4313 48.6931 80.5072 48.5993V48.2339V48.2173Z" fill="#1D204F"></path><path d="M83.3408 49.4584C83.1201 49.2543 83.0086 48.9566 83.0086 48.5567V46.6929H82.3276V45.5528H83.0086V44.4293H84.3101V45.5528H85.1441V46.6929H84.3101V48.1902C84.3101 48.3183 84.3445 48.4203 84.4121 48.4962C84.4797 48.5722 84.5735 48.6066 84.6838 48.6066C84.7514 48.6066 84.8202 48.5983 84.8879 48.5805C84.9472 48.5639 84.9982 48.5378 85.0243 48.5128L85.2794 49.4999C85.1857 49.577 85.067 49.6447 84.9045 49.6957C84.7431 49.7467 84.5474 49.7728 84.3172 49.7728C83.8996 49.7728 83.5852 49.6708 83.3645 49.4667L83.3408 49.4584Z" fill="#1D204F"></path><path d="M85.434 46.7001V45.56H86.1149V45.356C86.1149 44.9218 86.2514 44.573 86.5231 44.3096C86.8042 44.0462 87.153 43.9098 87.5861 43.9098C87.9349 43.9098 88.2244 43.9691 88.4545 44.0972L88.216 44.9906C88.1223 44.9312 88.012 44.9051 87.8839 44.9051C87.7474 44.9051 87.6371 44.9479 87.5517 45.0333C87.4662 45.1187 87.4235 45.2373 87.4235 45.3904V45.56H88.2576V46.7001H87.4235V49.6697H86.1138V46.7001H85.434Z" fill="#1D204F"></path><path d="M89.5867 49.502C89.2379 49.3062 88.9828 49.0428 88.8037 48.7107C88.6245 48.3785 88.532 48.0131 88.532 47.6299C88.532 47.2466 88.6257 46.8895 88.8037 46.5574C88.9828 46.2335 89.2462 45.9701 89.5867 45.7743C89.9355 45.5786 90.327 45.4766 90.7695 45.4766C91.2286 45.4766 91.6285 45.5703 91.9607 45.766C92.3011 45.9618 92.5645 46.2252 92.7437 46.549C92.9228 46.8812 93.0165 47.2383 93.0165 47.6215C93.0165 48.0048 92.9228 48.3702 92.7437 48.7024C92.5645 49.0345 92.3095 49.2979 91.9607 49.4937C91.6285 49.6894 91.2286 49.7832 90.7695 49.7832C90.327 49.7832 89.9355 49.6811 89.5867 49.4854V49.502ZM91.4066 48.3524C91.568 48.1566 91.6534 47.9181 91.6534 47.6382C91.6534 47.3487 91.5763 47.1102 91.4149 46.9323C91.2536 46.7448 91.0317 46.6511 90.7517 46.6511C90.4705 46.6511 90.2582 46.7448 90.1051 46.9323C89.9521 47.1197 89.875 47.3582 89.875 47.6382C89.875 47.9276 89.9521 48.1661 90.1051 48.3524C90.2582 48.5398 90.48 48.6335 90.76 48.6335C91.04 48.6335 91.2619 48.5398 91.4232 48.3524H91.4066Z" fill="#1D204F"></path><path d="M95.0069 45.5704V46.09C95.1517 45.9109 95.3391 45.7661 95.5776 45.6475C95.816 45.5277 96.0545 45.4684 96.2918 45.4684V46.7366C96.1981 46.7105 96.0877 46.6939 95.9679 46.6939C95.7887 46.6939 95.6025 46.7283 95.415 46.7959C95.2276 46.8635 95.0912 46.9573 95.0152 47.0676V49.6717H93.7054V45.5621L95.0069 45.5704Z" fill="#1D204F"></path><path d="M102.069 47.1945C102.069 47.0249 102.026 46.8885 101.941 46.7864C101.855 46.6844 101.72 46.6334 101.533 46.6334C101.371 46.6334 101.227 46.6761 101.099 46.752C100.97 46.8291 100.868 46.9217 100.792 47.0332V49.6883H99.4827V47.1862C99.4827 47.0166 99.44 46.8802 99.3546 46.7781C99.2691 46.6761 99.1339 46.6251 98.9464 46.6251C98.6736 46.6251 98.4268 46.7615 98.2144 47.0249V49.68H96.9047V45.5704H98.2144V46.0722C98.3248 45.9275 98.5039 45.7911 98.7507 45.6641C98.9975 45.536 99.2703 45.4684 99.5681 45.4684C99.8659 45.4684 100.113 45.5277 100.308 45.6558C100.504 45.7839 100.649 45.9702 100.734 46.2004C100.862 46.0046 101.049 45.8349 101.313 45.6902C101.577 45.5455 101.85 45.4695 102.147 45.4695C102.539 45.4695 102.845 45.5716 103.057 45.7756C103.27 45.9797 103.381 46.2858 103.381 46.6951V49.6729H102.08V47.1708L102.069 47.1945Z" fill="#1D204F"></path><path d="M106.765 49.2459C106.637 49.3907 106.459 49.5188 106.229 49.6113C106.008 49.7051 105.762 49.7478 105.489 49.7478C105.268 49.7478 105.046 49.6968 104.826 49.5947C104.613 49.4927 104.426 49.3396 104.281 49.1356C104.136 48.9398 104.069 48.6931 104.069 48.3953C104.069 47.9445 104.213 47.6123 104.495 47.4082C104.776 47.2041 105.099 47.1021 105.482 47.1021C105.763 47.1021 106.018 47.1448 106.247 47.2302C106.477 47.3157 106.647 47.4343 106.765 47.5873V47.0689C106.765 46.8898 106.688 46.745 106.545 46.6347C106.4 46.5243 106.196 46.4733 105.933 46.4733C105.72 46.4733 105.516 46.5077 105.32 46.5837C105.108 46.6608 104.929 46.7711 104.768 46.9159L104.3 46.0901C104.547 45.8778 104.836 45.7152 105.169 45.6132C105.501 45.5112 105.833 45.4602 106.164 45.4602C106.725 45.4602 107.185 45.5883 107.542 45.8434C107.9 46.0984 108.079 46.516 108.079 47.1021V49.6718H106.769V49.2637V49.2459H106.765ZM106.765 48.2173C106.698 48.1236 106.596 48.056 106.459 48.005C106.323 47.9539 106.178 47.9278 106.025 47.9278C105.838 47.9278 105.685 47.9706 105.558 48.056C105.43 48.1414 105.37 48.26 105.37 48.4131C105.37 48.5661 105.43 48.6859 105.558 48.7702C105.686 48.8556 105.839 48.8971 106.025 48.8971C106.178 48.8971 106.323 48.8722 106.459 48.82C106.587 48.769 106.689 48.6931 106.765 48.5993V48.2339V48.2173Z" fill="#1D204F"></path><path d="M109.225 48.2339C109.387 48.3787 109.617 48.5068 109.897 48.6171C110.178 48.7275 110.441 48.7785 110.68 48.7785C110.859 48.7785 111.003 48.7536 111.096 48.7014C111.19 48.6504 111.233 48.5732 111.233 48.4807C111.233 48.3882 111.174 48.311 111.054 48.26C110.943 48.2173 110.764 48.1663 110.517 48.1236C110.169 48.0643 109.896 47.9955 109.667 47.9278C109.454 47.8602 109.259 47.7321 109.08 47.5541C108.91 47.375 108.824 47.1282 108.824 46.8055C108.824 46.5587 108.892 46.3286 109.029 46.1245C109.165 45.9205 109.369 45.7591 109.632 45.6393C109.896 45.5207 110.211 45.4602 110.577 45.4602C110.901 45.4602 111.215 45.5112 111.513 45.6049C111.802 45.6986 112.066 45.8256 112.296 46.0047L111.794 46.8731C111.667 46.745 111.488 46.6347 111.266 46.5493C111.044 46.4638 110.815 46.4211 110.585 46.4211C110.424 46.4211 110.296 46.4472 110.202 46.4982C110.108 46.5493 110.065 46.6169 110.065 46.7023C110.065 46.796 110.116 46.8637 110.218 46.9064C110.32 46.9491 110.491 46.9918 110.729 47.0345C111.077 47.0938 111.359 47.1614 111.588 47.2386C111.818 47.3157 112.022 47.4509 112.2 47.6301C112.379 47.8092 112.463 48.0726 112.463 48.4131C112.463 48.6765 112.386 48.9066 112.233 49.1107C112.08 49.3147 111.868 49.4761 111.586 49.5959C111.305 49.7145 110.974 49.7751 110.591 49.7751C110.234 49.7751 109.877 49.7157 109.518 49.6054C109.17 49.4951 108.889 49.342 108.676 49.1463L109.221 48.2446V48.2339H109.225Z" fill="#1D204F"></path><path d="M114.459 45.5613V49.671H113.15V45.5613H114.459Z" fill="#1D204F"></path></svg></a>
+      <div class="ft-links"><h3>Məhsullar</h3>
+        <a href="#hellər">SİMA İmza</a><a href="#hellər">SİMA Token</a><a href="#hellər">SİMA KYC</a><a href="#hellər">SİMA Access</a><a href="#hellər">SİMA Pay</a>
+      </div>
+      <div class="ft-links"><h3>Platforma</h3>
+        <a href="#footer">Haqqımızda</a><a href="#footer">Xəbərlər</a><a href="#footer">Bloq</a><a href="#footer">Proqram təminatı</a><a href="#footer">Texniki sənədlər</a>
+      </div>
+      <div class="ft-links"><h3>Əlaqə və dəstək</h3>
+        <a href="#footer">Əlaqə</a><a href="#footer">Tərəfdaş ol</a><a href="#yoxla">Sənəd yoxla</a><a href="#footer">Kabinetə giriş</a><a href="#footer">Sertifikatın tətbiqi</a><a href="mailto:info@sima.az">info@sima.az</a><a href="tel:157">157 — Çağrı mərkəzi</a>
+      </div>
+    </div>
+    <div class="ft-line"></div>
+    <div class="ft-meta"><span>© 2026 SİMA · AzInTelecom MMC · VÖEN 9900048721</span><div><a href="#footer">Məxfilik siyasəti</a><a href="#footer">Sertifikat siyasəti</a></div></div>
+    <div class="ft-wordmark-stage" aria-label="SİMA">
+      <div class="ft-wordmark-perspective">
+        <div class="ft-wordmark-face"><svg class="ft-giga-svg" viewBox="0 0 552 176" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true"><path d="M65.5622 35.3105C78.6924 35.3105 90.0186 36.8187 99.541 39.8351C109.063 42.8515 116.575 47.2578 122.075 53.054C127.635 58.7911 131.006 65.711 132.189 73.8139L132.366 75.1447H103.977L103.711 74.2575C102.646 70.4131 100.546 67.2192 97.4118 64.676C94.3362 62.1328 90.1369 60.2401 84.8139 58.9981C79.55 57.6969 73.1328 57.0463 65.5622 57.0463C58.4057 57.0463 52.3433 57.7265 47.3751 59.0868C42.4661 60.388 38.74 62.2806 36.1967 64.7647C33.6535 67.1897 32.3819 70.0878 32.3819 73.459V73.5477C32.3819 77.9245 34.3041 81.2662 38.1485 83.5728C42.0521 85.8795 48.3806 87.506 57.134 88.4523L88.7175 91.0251C99.3635 92.1488 108.087 94.1598 114.889 97.0579C121.75 99.956 126.836 103.889 130.149 108.857C133.52 113.766 135.205 119.799 135.205 126.956V127.044C135.205 135.68 132.662 143.102 127.576 149.312C122.489 155.464 115.126 160.166 105.485 163.419C95.8444 166.672 84.1929 168.298 70.5304 168.298C56.513 168.298 44.4474 166.819 34.3337 163.862C24.279 160.846 16.3536 156.439 10.5574 150.643C4.76117 144.847 1.30119 137.809 0.177435 129.528L0 128.375H28.4783L28.6557 129.262C29.6612 132.988 31.9087 136.153 35.3983 138.755C38.947 141.298 43.7081 143.25 49.6818 144.61C55.7146 145.912 62.9894 146.562 71.5063 146.562C78.722 146.562 84.873 145.882 89.9595 144.522C95.1051 143.102 99.0383 141.062 101.759 138.4C104.539 135.739 105.929 132.604 105.929 128.996V128.907C105.929 124.235 104.036 120.775 100.251 118.527C96.4654 116.221 89.9299 114.535 80.6442 113.471L49.4156 110.898C33.8013 109.36 22.1794 105.634 14.5497 99.7194C6.91996 93.8049 3.10511 85.5837 3.10511 75.0559V74.9672C3.10511 66.8052 5.61877 59.767 10.6461 53.8525C15.7326 47.938 22.9482 43.3838 32.2932 40.19C41.6381 36.937 52.7277 35.3105 65.5622 35.3105Z"></path><path d="M181.338 165.814H152.062V37.7946H181.338V165.814Z"></path><path d="M287.533 133.787H288.066L337.57 37.7946H372.258V165.814H345.377V76.0318H343.869L298.002 165.814H277.508L231.711 76.0318H230.222V165.814H203.34V37.7946H238.029L287.533 133.787Z"></path><path d="M542.596 165.814H511.634L497.447 134.674H430.776L416.617 165.814H385.655L446.338 37.7946H481.913L542.596 165.814ZM440.014 114.358H488.192L464.347 62.0145H463.815L440.014 114.358Z"></path><path d="M166.611 0.000976562C170.929 0.000976562 174.448 1.27259 177.169 3.81583C179.949 6.35906 181.338 9.46417 181.338 13.1312C181.338 16.7981 179.949 19.9033 177.169 22.4465C174.448 24.9897 170.929 26.2613 166.611 26.2613C162.353 26.2613 158.834 24.9897 156.054 22.4465C153.333 19.9033 151.973 16.7981 151.973 13.1312C151.973 9.46417 153.333 6.35906 156.054 3.81583C158.834 1.27259 162.353 0.000976562 166.611 0.000976562Z"></path></svg></div>
+        <div class="ft-wordmark-reflection" aria-hidden="true"><svg class="ft-giga-svg" viewBox="0 0 552 176" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true"><path d="M65.5622 35.3105C78.6924 35.3105 90.0186 36.8187 99.541 39.8351C109.063 42.8515 116.575 47.2578 122.075 53.054C127.635 58.7911 131.006 65.711 132.189 73.8139L132.366 75.1447H103.977L103.711 74.2575C102.646 70.4131 100.546 67.2192 97.4118 64.676C94.3362 62.1328 90.1369 60.2401 84.8139 58.9981C79.55 57.6969 73.1328 57.0463 65.5622 57.0463C58.4057 57.0463 52.3433 57.7265 47.3751 59.0868C42.4661 60.388 38.74 62.2806 36.1967 64.7647C33.6535 67.1897 32.3819 70.0878 32.3819 73.459V73.5477C32.3819 77.9245 34.3041 81.2662 38.1485 83.5728C42.0521 85.8795 48.3806 87.506 57.134 88.4523L88.7175 91.0251C99.3635 92.1488 108.087 94.1598 114.889 97.0579C121.75 99.956 126.836 103.889 130.149 108.857C133.52 113.766 135.205 119.799 135.205 126.956V127.044C135.205 135.68 132.662 143.102 127.576 149.312C122.489 155.464 115.126 160.166 105.485 163.419C95.8444 166.672 84.1929 168.298 70.5304 168.298C56.513 168.298 44.4474 166.819 34.3337 163.862C24.279 160.846 16.3536 156.439 10.5574 150.643C4.76117 144.847 1.30119 137.809 0.177435 129.528L0 128.375H28.4783L28.6557 129.262C29.6612 132.988 31.9087 136.153 35.3983 138.755C38.947 141.298 43.7081 143.25 49.6818 144.61C55.7146 145.912 62.9894 146.562 71.5063 146.562C78.722 146.562 84.873 145.882 89.9595 144.522C95.1051 143.102 99.0383 141.062 101.759 138.4C104.539 135.739 105.929 132.604 105.929 128.996V128.907C105.929 124.235 104.036 120.775 100.251 118.527C96.4654 116.221 89.9299 114.535 80.6442 113.471L49.4156 110.898C33.8013 109.36 22.1794 105.634 14.5497 99.7194C6.91996 93.8049 3.10511 85.5837 3.10511 75.0559V74.9672C3.10511 66.8052 5.61877 59.767 10.6461 53.8525C15.7326 47.938 22.9482 43.3838 32.2932 40.19C41.6381 36.937 52.7277 35.3105 65.5622 35.3105Z"></path><path d="M181.338 165.814H152.062V37.7946H181.338V165.814Z"></path><path d="M287.533 133.787H288.066L337.57 37.7946H372.258V165.814H345.377V76.0318H343.869L298.002 165.814H277.508L231.711 76.0318H230.222V165.814H203.34V37.7946H238.029L287.533 133.787Z"></path><path d="M542.596 165.814H511.634L497.447 134.674H430.776L416.617 165.814H385.655L446.338 37.7946H481.913L542.596 165.814ZM440.014 114.358H488.192L464.347 62.0145H463.815L440.014 114.358Z"></path><path d="M166.611 0.000976562C170.929 0.000976562 174.448 1.27259 177.169 3.81583C179.949 6.35906 181.338 9.46417 181.338 13.1312C181.338 16.7981 179.949 19.9033 177.169 22.4465C174.448 24.9897 170.929 26.2613 166.611 26.2613C162.353 26.2613 158.834 24.9897 156.054 22.4465C153.333 19.9033 151.973 16.7981 151.973 13.1312C151.973 9.46417 153.333 6.35906 156.054 3.81583C158.834 1.27259 162.353 0.000976562 166.611 0.000976562Z"></path></svg></div>
+      </div>
+    </div>
+    <div class="ft-socials" aria-label="Sosial platformalar">
+      <a href="https://www.linkedin.com/company/si%CC%87ma/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
+
+    </div>
+  </div>
+</footer>
+
+<script>
+
+(function(){
+  const pt=document.getElementById('pt'),b=document.getElementById('ptBtn');
+  if(!pt||!b) return;
+  const PAUSE='<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
+  const PLAY='<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg>';
+  b.addEventListener('click',()=>{
+    const p=pt.classList.toggle('paused');
+    b.innerHTML=p?PLAY:PAUSE;
+    b.setAttribute('aria-label',p?'Davam et':'Dayandır');
+  });
+})();
+
+/* stat cards: tap to reveal on touch */
+(function(){
+  document.querySelectorAll('.sc').forEach(c=>c.addEventListener('click',()=>{
+    const on=c.classList.contains('flip');
+    document.querySelectorAll('.sc').forEach(x=>x.classList.remove('flip'));
+    if(!on)c.classList.add('flip');
+  }));
+})();
+
+/* product tabs with autoplay */
+(function(){
+  const wrap=document.querySelector('.pf');
+  if(!wrap) return;
+  const tabs=[...wrap.querySelectorAll('.pf-tab')];
+  const views=[...wrap.querySelectorAll('.pf-view')];
+  if(!tabs.length) return;
+  const DUR=10000;
+  const slow=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let idx=0,timer=null;
+
+  function show(i){
+    idx=i;
+    tabs.forEach((t,n)=>t.setAttribute('aria-selected',n===i?'true':'false'));
+    views.forEach(v=>v.classList.toggle('on',v.dataset.v===tabs[i].dataset.t));
+    const bar=tabs[i].querySelector('.pf-prog i');
+    if(bar){bar.style.animation='none';void bar.offsetWidth;bar.style.animation='';}
+  }
+  function play(){
+    if(slow) return;
+    wrap.classList.remove('paused');
+    clearInterval(timer);
+    timer=setInterval(()=>show((idx+1)%tabs.length),DUR);
+  }
+  function pause(){ clearInterval(timer); timer=null; wrap.classList.add('paused'); }
+
+  tabs.forEach((t,i)=>{
+    t.addEventListener('click',()=>{show(i);play();});
+    t.addEventListener('keydown',e=>{
+      if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft') return;
+      e.preventDefault();
+      const n=(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length;
+      tabs[n].focus(); show(n); play();
+    });
+  });
+  wrap.addEventListener('mouseenter',pause);
+  wrap.addEventListener('mouseleave',play);
+  document.addEventListener('visibilitychange',()=>{document.hidden?pause():play();});
+
+  show(0); play();
+})();
+
+/* service finder */
+const SV=[
+  {n:"Dövlət Vergi Xidməti",c:"dövlət",t:"Bəyannamə və hesabat"},
+  {n:"ASAN Login",c:"dövlət",t:"80+ portala giriş"},
+  {n:"mygov",c:"dövlət",t:"Şəxsi sənədlər"},
+  {n:"Elektron məhkəmə",c:"dövlət",t:"Müraciət göndərmək"},
+  {n:"E-Polis",c:"dövlət",t:"Cərimə və arayış"},
+  {n:"İpoteka və Kredit Fondu",c:"dövlət",t:"Müraciət"},
+  {n:"Elm və Təhsil Nazirliyi",c:"dövlət",t:"Şəxsi kabinet"},
+  {n:"Əmlak Xidməti",c:"dövlət",t:"Qeydiyyat"},
+  {n:"PAŞA Bank",c:"bank",t:"Kredit müraciəti"},
+  {n:"Hesab açılışı",c:"bank",t:"Onlayn identifikasiya"},
+  {n:"Kart sifarişi",c:"bank",t:"İmzalama"},
+  {n:"BOKT xidmətləri",c:"bank",t:"Kredit müqaviləsi"},
+  {n:"Hesabdan çıxarış",c:"bank",t:"Arayış"},
+  {n:"KASKO sığortası",c:"sığorta",t:"Müqavilə imzalanması"},
+  {n:"Həyat sığortası",c:"sığorta",t:"Anket və müqavilə"},
+  {n:"İcbari sığorta",c:"sığorta",t:"Polis rəsmiləşməsi"},
+  {n:"Azercell Fintek",c:"telekom",t:"Ödəniş həlləri"},
+  {n:"Azeronline",c:"telekom",t:"Abunə müqaviləsi"},
+  {n:"Nömrə qeydiyyatı",c:"telekom",t:"Şəxsiyyət təsdiqi"},
+  {n:"Universitet portalı",c:"təhsil",t:"Sənəd təqdimatı"},
+  {n:"Tələbə arayışı",c:"təhsil",t:"Arayış sifarişi"},
+  {n:"Diplom təsdiqi",c:"təhsil",t:"Müraciət"}
+];
+const PAL=['#2BD37E','#5FD7E8','#9BE8A8','#7FC9F0','#58E0B6','#A8DDF2'];
+const g=document.getElementById('svcs'),nr=document.getElementById('nores'),
+      cn=document.getElementById('cnt'),qi=document.getElementById('q');
+if(g&&qi){
+let cat='hamısı';
+const ini=n=>n.replace(/[^\p{L}\s.]/gu,'').split(/[\s.]+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+function draw(){
+  const t=qi.value.trim().toLowerCase();
+  const l=SV.filter(s=>(cat==='hamısı'||s.c===cat)&&(!t||s.n.toLowerCase().includes(t)||s.t.toLowerCase().includes(t)));
+  g.innerHTML=l.slice(0,9).map((s,i)=>`<a href="#" class="svc"><em style="background:${PAL[i%PAL.length]}">${ini(s.n)}</em><span><b>${s.n}</b><span>${s.t}</span></span></a>`).join('');
+  g.style.display=l.length?'grid':'none';
+  nr.style.display=l.length?'none':'block';
+  cn.textContent=l.length?`${l.length} nəticə${l.length>9?', ilk doqquzu göstərilir':''}`:'';
+}
+qi.addEventListener('input',draw);
+document.querySelectorAll('.cat').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.cat').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');cat=b.dataset.c;draw();
+}));
+draw();
+}
+
+/* lang */
+document.querySelectorAll('.lg button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.lg button').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');
+}));
+</script>
+
+<script>
+/* SİMA v7: lightweight native motion; no external JS dependency. */
+(function () {
+  'use strict';
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (reduced.matches) return;
+  const root = document.documentElement;
+  const header = document.querySelector('.hdr');
+  const hero = document.querySelector('.hero');
+  const stage = document.querySelector('.stage');
+  const aurora = document.querySelector('.aurora');
+  const isSupported = 'IntersectionObserver' in window;
+  if (!isSupported) return;
+  root.classList.add('motion-ready');
+  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('motion-hero-start')));
+
+  // One coordinated entrance system, not separate competing animations.
+  const selectors = [
+    '.sw .shead', '.sgrid .sc',
+    '.pf .shead', '.pf-tabs', '.pf-panel',
+    '.fd-l', '.fglass',
+    '.aud', '.aurora-in > div',
+    '.tc-head', '.tgrid .tc',
+    '.nws .feat', '.nws .nit',
+    '.ft-top > div'
+  ];
+  const targets = [...document.querySelectorAll(selectors.join(','))];
+  targets.forEach((el) => {
+    el.classList.add('motion-reveal');
+    // Stagger sibling cards, keeping the delay short on mobile as well.
+    const group = el.parentElement;
+    const siblings = [...group.children].filter(x => targets.includes(x));
+    if (siblings.length > 1) {
+      const index = siblings.indexOf(el);
+      el.style.setProperty('--reveal-delay', Math.min(index * 85, 350) + 'ms');
+    }
+  });
+  const reveal = new IntersectionObserver((entries, obs) => {
+    entries.forEach(({target, isIntersecting}) => {
+      if (!isIntersecting) return;
+      target.classList.add('is-visible');
+      obs.unobserve(target);
+    });
+  }, {threshold: 0.09, rootMargin:'0px 0px -35px 0px'});
+  targets.forEach(el => reveal.observe(el));
+
+  // Finmax-style numeric entrances, preserving the SİMA values and labels.
+  const stats = [...document.querySelectorAll('.sc-num')];
+  const counterObs = new IntersectionObserver((entries, obs) => {
+    entries.forEach(({target, isIntersecting}) => {
+      if (!isIntersecting) return;
+      obs.unobserve(target);
+      const original = target.textContent.trim();
+      const match = original.match(/^(\d+(?:[.,]\d+)?)(.*)$/u);
+      if (!match) return;
+      const finish = Number(match[1].replace(',','.'));
+      const tail = match[2];
+      const duration = 1450;
+      const start = performance.now();
+      function animate(time) {
+        if (reduced.matches) { target.textContent = original; return; }
+        const t = Math.min((time - start) / duration, 1);
+        const eased = 1-Math.pow(1-t,4);
+        const count = (finish * eased);
+        target.textContent = (Number.isInteger(finish) ? Math.round(count) : count.toFixed(1)) + tail;
+        if (t < 1) requestAnimationFrame(animate);
+        else target.textContent = original;
+      }
+      requestAnimationFrame(animate);
+    });
+  }, {threshold:.55});
+  stats.forEach(el => counterObs.observe(el));
+
+  // Subtle scroll-bound depth without scroll hijacking or layout reflows.
+  let ticking = false;
+  function updateMotion() {
+    ticking=false;
+    const y = window.scrollY;
+    if (header) header.classList.toggle('is-scrolled', y > 12);
+    if (stage && hero) {
+      const bounds = hero.getBoundingClientRect();
+      if (bounds.bottom > 0 && bounds.top < innerHeight) {
+        const progress = Math.max(0,Math.min(y / Math.max(hero.offsetHeight,1),1));
+        stage.style.setProperty('--hero-depth', (progress * 18).toFixed(1)+'px');
+      }
+    }
+    if (aurora) {
+      const b=aurora.getBoundingClientRect();
+      if(b.bottom>0 && b.top<innerHeight){
+        const ratio=(innerHeight-b.top)/(innerHeight+b.height);
+        aurora.style.setProperty('--glow-y',((ratio-.5)*45).toFixed(1)+'px');
+      }
+    }
+  }
+  function requestUpdate(){if(ticking) return;ticking=true;requestAnimationFrame(updateMotion);}
+  window.addEventListener('scroll',requestUpdate,{passive:true});
+  window.addEventListener('resize',requestUpdate,{passive:true});
+  updateMotion();
+})();
+</script>
+
+
+
+
+
+<script>
+/* SİMA v9 — native scroll hero: no sticky, no spacer, no scroll interception. */
+(()=>{
+  'use strict';
+  const hero=document.querySelector('.hero-finmax');
+  if(!hero || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const stage=hero.querySelector('.stage');
+  const panels=[...hero.querySelectorAll('.f')];
+  const phone=hero.querySelector('.phone');
+  const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+  const ease=t=>t*t*(3-2*t);
+  const coords={
+    'f-doc':[.36,105,-10], 'f-id':[-.36,115,9],
+    'f-acc':[.32,-79,8], 'f-pay':[-.32,-92,-9],
+    'f-check-l':[.47,126,16], 'f-check-r':[-.44,62,-16]
+  };
+  let scheduled=false;
+  function frame(){
+    scheduled=false;
+    const rect=hero.getBoundingClientRect();
+    if(rect.bottom<0 || rect.top>innerHeight) return;
+    // Begin only as the hero starts leaving the viewport; complete by the next section.
+    const scrolled=Math.max(0,-rect.top);
+    const distance=Math.max(300,Math.min(600,hero.offsetHeight*.56));
+    const t=ease(clamp((scrolled-65)/distance));
+    const width=stage.getBoundingClientRect().width;
+    const small=width<700;
+    for(const panel of panels){
+      const key=[...panel.classList].find(k=>coords[k]);
+      if(!key) continue;
+      const [dx,dy,rot]=coords[key];
+      panel.style.setProperty('--tx',(dx*width*t*(small?.86:1)).toFixed(1)+'px');
+      panel.style.setProperty('--ty',(dy*t).toFixed(1)+'px');
+      panel.style.setProperty('--panel-scale',(1-.42*t).toFixed(3));
+      panel.style.setProperty('--panel-rotate',(rot*t).toFixed(2)+'deg');
+      panel.style.setProperty('--panel-opacity',(1-ease(clamp((t-.63)/.37))*.97).toFixed(3));
+    }
+    phone.style.setProperty('--phone-y',(-22*t).toFixed(1)+'px');
+    phone.style.setProperty('--phone-scale',(1-.035*t).toFixed(3));
+    hero.style.setProperty('--pulse-opacity',(1-.95*t).toFixed(3));
+  }
+  function request(){if(scheduled)return;scheduled=true;requestAnimationFrame(frame)}
+  window.addEventListener('scroll',request,{passive:true});
+  window.addEventListener('resize',request,{passive:true});
+  frame();
+})();
+</script>
+
+</body>
+</html>
